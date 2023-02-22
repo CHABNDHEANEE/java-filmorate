@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.AfterEach;
@@ -15,8 +13,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,7 +37,7 @@ public class FilmControllerTest {
 
     @Test
     public void getEmptyFilms_AndExpect500() {
-        ResponseEntity response = restTemplate.getForEntity("/films", Film.class);
+        ResponseEntity<Film> response = restTemplate.getForEntity("/films", Film.class);
         assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
@@ -96,7 +92,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void getFilm_AndExpect200() throws JsonProcessingException {
+    public void getFilm_AndExpect200() {
         Film film = new Film(1, "God Father", "Film about father",
                 LocalDate.now(), Duration.ofMinutes(240));
 

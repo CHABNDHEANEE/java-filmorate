@@ -10,13 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
-import javax.swing.text.html.parser.Entity;
 import java.time.LocalDate;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 
+@SuppressWarnings("SpellCheckingInspection")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
     @Autowired
@@ -28,7 +27,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        user = new User(1, "test@gmail.com", "testlogin", "Name", LocalDate.of(2000, 1, 1));
+        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     }
 
     @AfterEach

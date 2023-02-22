@@ -45,11 +45,11 @@ public class UserController {
             throw new WrongUserInputException("Email can't be blank!");
         }
         if (!user.getEmail().contains("@")) {
-            log.info("Incor email err");
+            log.info("Incorrect email err");
             throw new WrongUserInputException("Incorrect user email!");
         }
         if (user.getLogin().contains(" ") || user.getLogin().isBlank()) {
-            log.info("Incor user login err");
+            log.info("Incorrect user login err");
             throw new WrongUserInputException("Incorrect user login!");
         }
         if (user.getBirthDate().isAfter(LocalDate.now())) {
@@ -57,7 +57,7 @@ public class UserController {
             throw new WrongUserInputException("You have a time machine! Don't ya?");
         }
 
-        if (user.getName().isBlank()) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
 

@@ -6,9 +6,7 @@ import ru.yandex.practicum.filmorate.exception.FilmsListException;
 import ru.yandex.practicum.filmorate.exception.WrongFilmException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +46,7 @@ public class FilmController {
         }
         if (film.getName().length() > 200) {
             log.info("Too long name err");
+            //noinspection SpellCheckingInspection
             throw new WrongFilmException("The name is tooooooooo long");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
