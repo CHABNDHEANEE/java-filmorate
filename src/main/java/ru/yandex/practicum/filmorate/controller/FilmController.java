@@ -65,4 +65,8 @@ public class FilmController {
             throw new FilmsListException("Список фильмов пуст!");
         }
     }
+
+    public void clearFilmsList() {
+        films = new HashMap<>();
+    }
 }

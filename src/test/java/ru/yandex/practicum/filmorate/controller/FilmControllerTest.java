@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,8 +30,20 @@ public class FilmControllerTest {
 
     @Autowired
     private FilmController controller;
+
+    @AfterEach
+    void afterEach() {
+        controller.clearFilmsList();
+    }
+
     ObjectMapper objectMapper = new ObjectMapper()
             .registerModule(new JavaTimeModule());
+
+    @Test
+    public void getEmptyFilms_AndExpect500() {
+        ResponseEntity response = restTemplate.getForEntity("/films", Film.class);
+        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
 
     @Test
     public void addFilm_AndExpect200() {
@@ -110,11 +123,5 @@ public class FilmControllerTest {
         ResponseEntity<Film[]> response = restTemplate.getForEntity("/films", Film[].class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-    }
-
-    @Test
-    public void getEmptyFilms_AndExpect500() {
-        ResponseEntity<Film> response = restTemplate.getForEntity("/films", Film.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }
