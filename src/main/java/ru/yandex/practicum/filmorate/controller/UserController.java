@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.UserListException;
 import ru.yandex.practicum.filmorate.exception.WrongUserInputException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -13,11 +14,11 @@ import java.util.List;
 @RestController
 @Slf4j
 public class UserController {
-    private HashMap<Integer, User> users;
+    private HashMap<Integer, User> users = new HashMap<>();
 
     @PostMapping("/user")
     public User addUser(@RequestBody User user) {
-        checkUser(user);
+        user = checkUser(user);
         users.put(user.getId(), user);
         log.info("User added");
         return user;
@@ -25,7 +26,7 @@ public class UserController {
 
     @PutMapping("/user")
     public User updateUser(@RequestBody User user) {
-        checkUser(user);
+        user = checkUser(user);
         users.put(user.getId(), user);
         log.info("User updated");
         return user;
@@ -33,11 +34,12 @@ public class UserController {
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
+        checkUsersListExistence();
         log.info("All users printed");
         return new ArrayList<>(users.values());
     }
 
-    private void checkUser(User user) {
+    private User checkUser(User user) {
         if (user.getEmail().isBlank()) {
             log.info("Blank email err");
             throw new WrongUserInputException("Email can't be blank!");
@@ -54,5 +56,22 @@ public class UserController {
             log.info("Wrong bd err");
             throw new WrongUserInputException("You have a time machine! Don't ya?");
         }
+
+        if (user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
+
+        return user;
+    }
+
+    private void checkUsersListExistence() {
+        if (users.isEmpty()) {
+            log.info("User list empty error");
+            throw new UserListException("User list is empty");
+        }
+    }
+
+    public void clearUserList() {
+        users = new HashMap<>();
     }
 }
