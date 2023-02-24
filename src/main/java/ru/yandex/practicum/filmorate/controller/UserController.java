@@ -11,19 +11,20 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
 public class UserController {
-    private HashMap<Integer, User> users = new HashMap<>();
+    private Map<Integer, User> users = new HashMap<>();
 
     private int id = 1;
 
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
         user = checkUser(user);
-        user.setId(id);
-        id++;
+
+        setIdForUser(user);
         users.put(user.getId(), user);
         log.info("User added");
         return user;
@@ -31,12 +32,16 @@ public class UserController {
 
     @PutMapping("/users")
     public User updateUser(@Valid @RequestBody User user) {
+        int userId = user.getId();
+
         user = checkUser(user);
-        if (!users.containsKey(user.getId())) {
+
+        if (!users.containsKey(userId)) {
             log.info("wrong id update user");
             throw new WrongUserInputException("User with the id doesn't exist");
         }
-        users.put(user.getId(), user);
+
+        users.put(userId, user);
         log.info("User updated");
         return user;
     }
@@ -79,5 +84,10 @@ public class UserController {
     public void clearUserList() {
         users = new HashMap<>();
         id = 1;
+    }
+
+    private void setIdForUser(User user) {
+        user.setId(id);
+        id++;
     }
 }
