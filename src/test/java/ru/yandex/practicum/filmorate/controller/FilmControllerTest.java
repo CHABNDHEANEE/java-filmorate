@@ -19,6 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 
 
+@SuppressWarnings("unused")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FilmControllerTest {
     @Autowired
@@ -48,6 +49,7 @@ public class FilmControllerTest {
         assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     public void addFilm_AndExpect200() {
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
@@ -67,7 +69,7 @@ public class FilmControllerTest {
 
     @Test
     public void addFilm_WithDescriptionLongerThan200Chars_AndExpect500() {
-        String desc = new String("aa").repeat(101);
+        String desc = "aa".repeat(101);
         film.setDescription(desc);
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
@@ -103,6 +105,7 @@ public class FilmControllerTest {
         assertThat(response.getBody()[0], is(film));
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     public void updateFilm_AndExpect200() {
         restTemplate.postForEntity("/films", film, Film.class);

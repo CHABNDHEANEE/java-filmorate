@@ -22,7 +22,7 @@ public class UserController {
 
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
-        user = checkUser(user);
+        checkUser(user);
 
         setIdForUser(user);
         users.put(user.getId(), user);
@@ -34,7 +34,7 @@ public class UserController {
     public User updateUser(@Valid @RequestBody User user) {
         int userId = user.getId();
 
-        user = checkUser(user);
+        checkUser(user);
 
         if (!users.containsKey(userId)) {
             log.info("wrong id update user");
@@ -53,7 +53,7 @@ public class UserController {
         return new ArrayList<>(users.values());
     }
 
-    private User checkUser(User user) {
+    private void checkUser(User user) {
         if (user.getLogin().contains(" ")) {
             log.info("Incorrect user login err");
             throw new WrongUserInputException("Incorrect user login!");
@@ -70,8 +70,6 @@ public class UserController {
             user.setId(id);
             id++;
         }
-
-        return user;
     }
 
     private void checkUsersListExistence() {

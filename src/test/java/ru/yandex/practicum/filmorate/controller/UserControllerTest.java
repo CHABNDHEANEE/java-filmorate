@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"SpellCheckingInspection", "unused"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
     @Autowired
@@ -41,6 +41,7 @@ public class UserControllerTest {
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     void addUser_WithoutNickAndWithEmail_AndExpect200() {
         user.setName("");
@@ -70,6 +71,7 @@ public class UserControllerTest {
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @Test
     void updateUser_AndExpect200() {
         ResponseEntity<User> addResponse = restTemplate.postForEntity("/users", user, User.class);
