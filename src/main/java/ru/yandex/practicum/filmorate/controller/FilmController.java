@@ -11,18 +11,18 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
 public class FilmController {
     private int id = 1;
-    private HashMap<Integer, Film> films = new HashMap<>();
+    private Map<Integer, Film> films = new HashMap<>();
 
     @PostMapping("/films")
     public Film addFilm(@Valid @RequestBody Film film) {
         checkFilm(film);
-        film.setId(id);
-        id++;
+        setIdForFilm(film);
         films.put(film.getId(), film);
         log.info("Film added");
         return film;
@@ -30,12 +30,14 @@ public class FilmController {
 
     @PutMapping("/films")
     public Film updateFilm(@Valid @RequestBody Film film) {
+        int id = film.getId();
+
         checkFilm(film);
-        if (!films.containsKey(film.getId())) {
+        if (!films.containsKey(id)) {
             log.info("id doesn't exist");
             throw new WrongFilmException("Film with the id doesn't exist");
         }
-        films.put(film.getId(), film);
+        films.put(id, film);
         log.info("Film updated");
         return film;
     }
@@ -72,5 +74,10 @@ public class FilmController {
     public void clearFilmsList() {
         films = new HashMap<>();
         id = 1;
+    }
+
+    private void setIdForFilm(Film film) {
+        film.setId(id);
+        id++;
     }
 }
