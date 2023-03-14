@@ -42,6 +42,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
+    public Film deleteFilm(Film film) {
+        checkFilmsExistence();
+        films.remove(film.getId());
+        return film;
+    }
+
+    @Override
     public List<Film> getAllFilms() {
         checkFilmsExistence();
         log.info("Get all films");
@@ -75,6 +82,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
     }
 
+    @Override
     public void clearFilmsList() {
         films = new HashMap<>();
         id = 1;

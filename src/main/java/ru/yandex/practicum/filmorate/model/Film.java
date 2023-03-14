@@ -3,13 +3,18 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
+import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.springframework.lang.NonNull;
+
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -20,8 +25,22 @@ public class Film {
     private String name;
     @NotBlank
     private String description;
-    @NotNull
+    @NonNull
     private LocalDate releaseDate;
     @NonNull
     private int duration;
+
+    final private Set<User> userLiked = new HashSet<>();
+
+    public void like(User user) {
+        userLiked.add(user);
+    }
+
+    public void unlike(User user) {
+        userLiked.remove(user);
+    }
+
+    public int getLikes() {
+        return userLiked.size();
+    }
 }

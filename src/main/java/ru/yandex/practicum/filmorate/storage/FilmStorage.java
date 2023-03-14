@@ -10,5 +10,9 @@ public interface FilmStorage {
 
     public Film updateFilm(Film film);
 
+    public Film deleteFilm(Film film);
+
     public List<Film> getAllFilms();
+
+    public void clearFilmsList();
 }
