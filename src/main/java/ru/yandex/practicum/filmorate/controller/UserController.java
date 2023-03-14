@@ -1,10 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.UserListException;
 import ru.yandex.practicum.filmorate.exception.WrongUserInputException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -15,19 +18,22 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
-        return ;
+        return userService.addUser(user);
     }
 
     @PutMapping("/users")
     public User updateUser(@Valid @RequestBody User user) {
-        return ;
+        return userService.updateUser(user);
     }
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        return ;
+        return userService.getAllUsers();
     }
 }

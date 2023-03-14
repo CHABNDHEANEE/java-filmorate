@@ -9,5 +9,7 @@ public interface UserStorage {
 
     public User updateUser(User user);
 
+    public User deleteUser(User user);
+
     public List<User> getAllUsers();
 }

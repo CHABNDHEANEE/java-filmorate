@@ -46,6 +46,14 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
+    public User deleteUser(User user) {
+        checkUsersListExistence();
+
+        users.remove(user.getId());
+        return user;
+    }
+
+    @Override
     public List<User> getAllUsers() {
         checkUsersListExistence();
         log.info("All users printed");
