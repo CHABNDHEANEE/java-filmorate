@@ -30,4 +30,8 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
+    public void clearUserList() {
+        userService.clearUserList();
+    }
 }

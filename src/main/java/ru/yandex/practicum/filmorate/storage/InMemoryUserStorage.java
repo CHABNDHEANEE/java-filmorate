@@ -60,6 +60,12 @@ public class InMemoryUserStorage implements UserStorage {
         return new ArrayList<>(users.values());
     }
 
+    @Override
+    public void clearUserList() {
+        users.clear();
+        id = 1;
+    }
+
     private void setIdForUser(User user) {
         user.setId(id);
         id++;

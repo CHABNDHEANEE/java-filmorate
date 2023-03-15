@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,7 +28,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
+        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1), new HashSet<>());
     }
 
     @AfterEach

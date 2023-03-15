@@ -55,4 +55,8 @@ public class UserService {
         initUser.addFriend(requestedUser);
         requestedUser.addFriend(initUser);
     }
+
+    public void clearUserList() {
+        userStorage.clearUserList();
+    }
 }
