@@ -24,7 +24,7 @@ public class FilmController {
 
     @PostMapping("/films")
     public Film addFilm(@Valid @RequestBody Film film) {
-        return filmService.deleteFilm(film);
+        return filmService.addFilm(film);
     }
 
     @PutMapping("/films")
