@@ -32,6 +32,10 @@ public class FilmService {
         return filmStorage.deleteFilm(film);
     }
 
+    public Film getFilmById(int id) {
+        return filmStorage.getFilm(id);
+    }
+
     public void like(Film film, User user) {
         film.like(user);
     }

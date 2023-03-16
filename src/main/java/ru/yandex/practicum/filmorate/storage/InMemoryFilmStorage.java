@@ -55,6 +55,13 @@ public class InMemoryFilmStorage implements FilmStorage {
         return new ArrayList<>(films.values());
     }
 
+    @Override
+    public Film getFilm(int id) {
+        log.info("get film by id storage");
+
+        return films.get(id);
+    }
+
     private void checkFilmsExistence() {
         if (films.values().isEmpty()) {
             throw new FilmsListException("Список фильмов пуст!");
