@@ -8,6 +8,8 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,15 +41,42 @@ public class UserService {
         return userStorage.deleteUser(user);
     }
 
-    public void addFriend(User initUser, User requestedUser) {
+    public void addFriend(int userId, int friendId) {
         log.info("add friends");
-        initUser.addFriend(requestedUser);
-        requestedUser.addFriend(initUser);
+
+        User user = userStorage.getUser(userId);
+        User friend = userStorage.getUser(friendId);
+
+        user.addFriend(friend);
+        friend.addFriend(user);
     }
 
-    public List<User> getFriendsList(User user) {
+    public void deleteFriend(int userId, int friendId) {
+        log.info("delete friend");
+
+        User user = userStorage.getUser(userId);
+        User friend = userStorage.getUser(friendId);
+
+        user.deleteFriend(friend);
+        friend.deleteFriend(user);
+    }
+
+    public List<User> getFriendsList(int id) {
         log.info("get friends list");
-        return new ArrayList<>(user.getFriendsList());
+        return new ArrayList<>(userStorage.getUser(id).getFriendsList());
+    }
+
+    public List<User> getCommonFriends(int id, int otherId) {
+        log.info("get common friends service");
+
+        User user = userStorage.getUser(id);
+        User other = userStorage.getUser(otherId);
+        Set<User> userFriends = user.getFriendsList();
+        Set<User> otherFriends = other.getFriendsList();
+
+        userFriends.retainAll(otherFriends);
+
+        return new ArrayList<>(userFriends);
     }
 
     public List<User> getAllUsers() {
