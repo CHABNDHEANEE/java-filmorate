@@ -27,6 +27,12 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
+    public User getUser(int id) {
+        log.info("get user service");
+
+        return userStorage.getUser(id);
+    }
+
     public User deleteUser(User user) {
         log.info("delete user service");
 
