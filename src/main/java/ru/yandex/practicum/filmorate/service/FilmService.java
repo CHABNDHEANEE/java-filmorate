@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FilmService {
     private final FilmStorage filmStorage;
+    private final UserService userService;
 
     public Film addFilm(Film film) {
         log.info("add film");
@@ -36,16 +38,30 @@ public class FilmService {
         return filmStorage.getFilm(id);
     }
 
-    public void like(Film film, User user) {
+    public void like(int filmId, int userId) {
+        log.info("like film service");
+
+        Film film = filmStorage.getFilm(filmId);
+        User user = userService.getUser(userId);
+
         film.like(user);
     }
 
-    public void unlike(Film film, User user) {
+    public void unlike(int filmId, int userId) {
+        log.info("unlike film service");
+
+        Film film = filmStorage.getFilm(filmId);
+        User user = userService.getUser(userId);
+
         film.unlike(user);
     }
 
-    public List<Film> getMostPopularFilms() {
-        return filmStorage.getAllFilms().stream().sorted(Comparator.comparing(Film::getLikes)).limit(10).collect(Collectors.toList());
+    public List<Film> getMostPopularFilms(Optional<Integer> count) {
+        int filmsToGet = 10;
+        if (count.isPresent()) {
+            filmsToGet = count.get();
+        }
+        return filmStorage.getAllFilms().stream().sorted(Comparator.comparing(Film::getLikes)).limit(filmsToGet).collect(Collectors.toList());
     }
 
 
