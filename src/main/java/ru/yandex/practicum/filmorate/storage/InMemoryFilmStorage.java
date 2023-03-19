@@ -50,7 +50,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> getAllFilms() {
-        checkFilmsExistence();
         log.info("Get all films");
         return new ArrayList<>(films.values());
     }
@@ -58,7 +57,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film getFilm(int id) {
         log.info("get film by id storage");
-
+        if (!films.containsKey(id)) {
+            throw new ObjectExistenceException("The film doesn't exist");
+        }
         return films.get(id);
     }
 

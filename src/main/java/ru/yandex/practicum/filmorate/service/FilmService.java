@@ -65,7 +65,7 @@ public class FilmService {
         if (count.isPresent()) {
             filmsToGet = count.get();
         }
-        return filmStorage.getAllFilms().stream().sorted(Comparator.comparing(Film::getLikes)).limit(filmsToGet).collect(Collectors.toList());
+        return filmStorage.getAllFilms().stream().sorted(Comparator.comparing(Film::getLikes).reversed()).limit(filmsToGet).collect(Collectors.toList());
     }
 
 
