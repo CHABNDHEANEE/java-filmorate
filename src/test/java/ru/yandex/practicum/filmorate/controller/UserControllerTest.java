@@ -96,15 +96,15 @@ public class UserControllerTest {
     }
 
     @Test
-    void getAllUsers_EmptyList_AndExpect500() {
+    void getAllUsers_EmptyList_AndExpect404() {
         ResponseEntity<User> response = restTemplate.getForEntity("/users", User.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
 
     @Test
-    void addUser_WithBDFromFuture_AndExpect500() {
+    void addUser_WithBDFromFuture_AndExpect400() {
         user.setBirthday(LocalDate.now().plusDays(1));
         ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 }

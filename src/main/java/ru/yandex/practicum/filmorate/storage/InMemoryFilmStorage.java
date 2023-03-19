@@ -2,10 +2,10 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.FilmsListException;
-import ru.yandex.practicum.filmorate.exception.WrongFilmException;
+import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         checkFilm(film);
         if (!films.containsKey(id)) {
             log.info("id doesn't exist");
-            throw new WrongFilmException("Film with the id doesn't exist");
+            throw new ObjectExistenceException("Film with the id doesn't exist");
         }
         films.put(id, film);
         log.info("Film updated");
@@ -64,7 +64,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     private void checkFilmsExistence() {
         if (films.values().isEmpty()) {
-            throw new FilmsListException("Список фильмов пуст!");
+            throw new ObjectExistenceException("Список фильмов пуст!");
         }
     }
 
@@ -77,15 +77,15 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (film.getDescription().length() > 200) {
             log.info("Too long desc err");
             //noinspection SpellCheckingInspection
-            throw new WrongFilmException("The description is tooooooooo long");
+            throw new ValidationException("The description is tooooooooo long");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             log.info("Wrong release date err");
-            throw new WrongFilmException("The release date can't be before 1895.12.28");
+            throw new ValidationException("The release date can't be before 1895.12.28");
         }
         if (film.getDuration() < 0) {
             log.info("Neg duration err");
-            throw new WrongFilmException("The duration can't be negative");
+            throw new ValidationException("The duration can't be negative");
         }
     }
 

@@ -44,9 +44,9 @@ public class FilmControllerTest {
             .registerModule(new JavaTimeModule());
 
     @Test
-    public void getEmptyFilms_AndExpect500() {
+    public void getEmptyFilms_AndExpect404() {
         ResponseEntity<Film> response = restTemplate.getForEntity("/films", Film.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -68,30 +68,30 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void addFilm_WithDescriptionLongerThan200Chars_AndExpect500() {
+    public void addFilm_WithDescriptionLongerThan200Chars_AndExpect400() {
         String desc = "aa".repeat(101);
         film.setDescription(desc);
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void addFilm_WithTooEarlyReleaseDate_AndExpect500() {
+    public void addFilm_WithTooEarlyReleaseDate_AndExpect400() {
         film.setReleaseDate(LocalDate.of(1800, 1, 1));
 
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void addFilm_WithNegativeDuration_AndExpect500() {
+    public void addFilm_WithNegativeDuration_AndExpect400() {
         film.setDuration(-10);
 
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test

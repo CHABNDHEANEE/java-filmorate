@@ -38,6 +38,10 @@ public class FilmService {
         return filmStorage.getFilm(id);
     }
 
+    public List<Film> getAllFilms() {
+        return filmStorage.getAllFilms();
+    }
+
     public void like(int filmId, int userId) {
         log.info("like film service");
 

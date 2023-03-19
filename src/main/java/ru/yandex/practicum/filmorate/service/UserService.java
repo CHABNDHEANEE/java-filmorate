@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -63,7 +64,7 @@ public class UserService {
 
     public List<User> getFriendsList(int id) {
         log.info("get friends list");
-        return new ArrayList<>(userStorage.getUser(id).getFriendsList());
+        return convertSetOfIdsToUsers(userStorage.getUser(id).getFriendsIdList());
     }
 
     public List<User> getCommonFriends(int id, int otherId) {
@@ -71,12 +72,22 @@ public class UserService {
 
         User user = userStorage.getUser(id);
         User other = userStorage.getUser(otherId);
-        Set<User> userFriends = user.getFriendsList();
-        Set<User> otherFriends = other.getFriendsList();
+        Set<Integer> userFriends = new HashSet<>(user.getFriendsIdList());
+        Set<Integer> otherFriends = new HashSet<>(other.getFriendsIdList());
 
         userFriends.retainAll(otherFriends);
 
-        return new ArrayList<>(userFriends);
+        return convertSetOfIdsToUsers(userFriends);
+    }
+
+    private List<User> convertSetOfIdsToUsers(Set<Integer> ids) {
+        List<User> result = new ArrayList<>();
+
+        for (Integer id : ids) {
+            result.add(userStorage.getUser(id));
+        }
+
+        return result;
     }
 
     public List<User> getAllUsers() {

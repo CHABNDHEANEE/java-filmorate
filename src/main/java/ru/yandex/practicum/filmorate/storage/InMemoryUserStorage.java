@@ -2,15 +2,12 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.UserListException;
-import ru.yandex.practicum.filmorate.exception.WrongUserInputException;
+import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.ValidationException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -24,6 +21,7 @@ public class InMemoryUserStorage implements UserStorage {
         checkUser(user);
 
         setIdForUser(user);
+        user.setFriendsIdList(new HashSet<>());
         users.put(user.getId(), user);
         log.info("User added");
         return user;
@@ -37,8 +35,11 @@ public class InMemoryUserStorage implements UserStorage {
 
         if (!users.containsKey(userId)) {
             log.info("wrong id update user");
-            throw new WrongUserInputException("User with the id doesn't exist");
+            throw new ObjectExistenceException("User with the id doesn't exist");
         }
+
+        Set<Integer> friendsList = users.get(userId).getFriendsIdList();
+        user.setFriendsIdList(friendsList);
 
         users.put(userId, user);
         log.info("User updated");
@@ -47,6 +48,10 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUser(int id) {
+        if (!users.containsKey(id)) {
+            throw new ObjectExistenceException("User with the id doesn't exist");
+        }
+
         return users.get(id);
     }
 
@@ -79,18 +84,18 @@ public class InMemoryUserStorage implements UserStorage {
     private void checkUsersListExistence() {
         if (users.isEmpty()) {
             log.info("User list empty error");
-            throw new UserListException("User list is empty");
+            throw new ObjectExistenceException("User list is empty");
         }
     }
 
     private void checkUser(User user) {
         if (user.getLogin().contains(" ")) {
             log.info("Incorrect user login err");
-            throw new WrongUserInputException("Incorrect user login!");
+            throw new ValidationException("Incorrect user login!");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
             log.info("Wrong bd err");
-            throw new WrongUserInputException("You have a time machine! Don't ya?");
+            throw new ValidationException("You have a time machine! Don't ya?");
         }
 
         if (user.getName() == null || user.getName().isBlank()) {
