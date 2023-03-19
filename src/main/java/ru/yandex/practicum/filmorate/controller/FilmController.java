@@ -66,7 +66,7 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getBestFilms(@RequestParam(required = false)Optional<Integer> count) {
+    public List<Film> getBestFilms(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") @RequestParam(required = false)Optional<Integer> count) {
         log.info("get best films.");
 
         return filmService.getMostPopularFilms(count);

@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Objects;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,7 +57,7 @@ public class FilmControllerTest {
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody().getId(), notNullValue());
+        assertThat(Objects.requireNonNull(response.getBody()).getId(), notNullValue());
         assertThat(response.getBody(), is(film));
     }
 
@@ -119,6 +119,6 @@ public class FilmControllerTest {
         ResponseEntity<Film[]> response = restTemplate.getForEntity("/films", Film[].class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody()[0].getName(), is("God Son"));
+        assertThat(Objects.requireNonNull(response.getBody())[0].getName(), is("God Son"));
     }
 }
