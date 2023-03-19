@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,9 +45,10 @@ public class FilmControllerTest {
             .registerModule(new JavaTimeModule());
 
     @Test
-    public void getEmptyFilms_AndExpect404() {
-        ResponseEntity<Film> response = restTemplate.getForEntity("/films", Film.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    public void getEmptyFilms_AndExpect200() {
+        ResponseEntity<Film[]> response = restTemplate.getForEntity("/films", Film[].class);
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(response.getBody(), is(new Film[]{}));
     }
 
     @SuppressWarnings("DataFlowIssue")

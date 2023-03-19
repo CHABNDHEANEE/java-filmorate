@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -26,8 +27,8 @@ public class User {
     private String name;
     @NotNull
     private LocalDate birthday;
+
     @Builder.Default
-    @JsonIgnore
     private Set<Integer> friendsIdList = new HashSet<>();
 
     public void addFriend(User user) {
@@ -40,5 +41,13 @@ public class User {
 
     public void deleteFriend(User user) {
         friendsIdList.remove(user.getId());
+    }
+
+    public Set<Integer> getFriendsIdList() {
+        if (friendsIdList == null) {
+            friendsIdList = new HashSet<>();
+        }
+
+        return friendsIdList;
     }
 }
