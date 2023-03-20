@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,7 +63,7 @@ public class UserService {
 
     public List<User> getFriendsList(int id) {
         log.info("get friends list");
-        return convertSetOfIdsToUsers(userStorage.getUser(id).getFriendsIdList());
+        return convertSetOfIdsToUsers(userStorage.getUser(id).getFriendsId());
     }
 
     public List<User> getCommonFriends(int id, int otherId) {
@@ -71,8 +71,8 @@ public class UserService {
 
         User user = userStorage.getUser(id);
         User other = userStorage.getUser(otherId);
-        Set<Integer> userFriends = new HashSet<>(user.getFriendsIdList());
-        Set<Integer> otherFriends = new HashSet<>(other.getFriendsIdList());
+        Set<Integer> userFriends = new HashSet<>(user.getFriendsId());
+        Set<Integer> otherFriends = new HashSet<>(other.getFriendsId());
 
         userFriends.retainAll(otherFriends);
 
@@ -80,13 +80,9 @@ public class UserService {
     }
 
     private List<User> convertSetOfIdsToUsers(Set<Integer> ids) {
-        List<User> result = new ArrayList<>();
-
-        for (Integer id : ids) {
-            result.add(userStorage.getUser(id));
-        }
-
-        return result;
+        return ids.stream()
+                .map(userStorage::getUser)
+                .collect(Collectors.toList());
     }
 
     public List<User> getAllUsers() {

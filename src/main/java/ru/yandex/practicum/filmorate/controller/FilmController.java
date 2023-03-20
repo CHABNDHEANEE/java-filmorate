@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,18 +14,13 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class FilmController {
     private final FilmService filmService;
-
-    @Autowired
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
-    }
 
     @PostMapping("/films")
     public Film addFilm(@Valid @RequestBody Film film) {
@@ -66,7 +61,7 @@ public class FilmController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getBestFilms(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") @RequestParam(required = false)Optional<Integer> count) {
+    public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
         log.info("get best films.");
 
         return filmService.getMostPopularFilms(count);

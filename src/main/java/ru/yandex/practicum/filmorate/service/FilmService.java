@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -60,12 +59,15 @@ public class FilmService {
         film.unlike(user);
     }
 
-    public List<Film> getMostPopularFilms(Optional<Integer> count) {
+    public List<Film> getMostPopularFilms(Integer count) {
         int filmsToGet = 10;
-        if (count.isPresent()) {
-            filmsToGet = count.get();
+        if (count != null) {
+            filmsToGet = count;
         }
-        return filmStorage.getAllFilms().stream().sorted(Comparator.comparing(Film::getLikes).reversed()).limit(filmsToGet).collect(Collectors.toList());
+        return filmStorage.getAllFilms().stream()
+                .sorted(Comparator.comparing(Film::getLikes).reversed())
+                .limit(filmsToGet)
+                .collect(Collectors.toList());
     }
 
 

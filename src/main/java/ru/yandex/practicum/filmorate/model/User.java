@@ -27,25 +27,13 @@ public class User {
     private LocalDate birthday;
 
     @Builder.Default
-    private Set<Integer> friendsIdList = new HashSet<>();
+    private Set<Integer> friendsId = new HashSet<>();
 
     public void addFriend(User user) {
-        if (friendsIdList == null) {
-            friendsIdList = new HashSet<>();
-        }
-
-        friendsIdList.add(user.getId());
+        friendsId.add(user.getId());
     }
 
     public void deleteFriend(User user) {
-        friendsIdList.remove(user.getId());
-    }
-
-    public Set<Integer> getFriendsIdList() {
-        if (friendsIdList == null) {
-            friendsIdList = new HashSet<>();
-        }
-
-        return friendsIdList;
+        friendsId.remove(user.getId());
     }
 }

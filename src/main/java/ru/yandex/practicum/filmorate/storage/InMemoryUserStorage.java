@@ -21,7 +21,7 @@ public class InMemoryUserStorage implements UserStorage {
         checkUser(user);
 
         setIdForUser(user);
-        user.setFriendsIdList(new HashSet<>());
+        user.setFriendsId(new HashSet<>());
         users.put(user.getId(), user);
         log.info("User added");
         return user;
@@ -38,8 +38,8 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ObjectExistenceException("User with the id doesn't exist");
         }
 
-        Set<Integer> friendsList = users.get(userId).getFriendsIdList();
-        user.setFriendsIdList(friendsList);
+        Set<Integer> friendsList = users.get(userId).getFriendsId();
+        user.setFriendsId(friendsList);
 
         users.put(userId, user);
         log.info("User updated");
