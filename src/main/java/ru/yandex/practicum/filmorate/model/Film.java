@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.springframework.lang.NonNull;
+
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,19 @@ public class Film {
     private String description;
     @NotNull
     private LocalDate releaseDate;
-    @NonNull
+    @NotNull
     private int duration;
+    final private Set<Integer> userLiked = new HashSet<>();
+
+    public void like(User user) {
+        userLiked.add(user.getId());
+    }
+
+    public void unlike(User user) {
+        userLiked.remove(user.getId());
+    }
+
+    public int getLikes() {
+        return userLiked.size();
+    }
 }

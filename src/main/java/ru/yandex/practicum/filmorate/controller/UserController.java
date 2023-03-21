@@ -1,91 +1,102 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.UserListException;
-import ru.yandex.practicum.filmorate.exception.WrongUserInputException;
+import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class UserController {
-    private Map<Integer, User> users = new HashMap<>();
-
-    private int id = 1;
-
+    private final UserService userService;
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
-        checkUser(user);
-
-        setIdForUser(user);
-        users.put(user.getId(), user);
-        log.info("User added");
-        return user;
+        return userService.addUser(user);
     }
 
     @PutMapping("/users")
     public User updateUser(@Valid @RequestBody User user) {
-        int userId = user.getId();
+        return userService.updateUser(user);
+    }
 
-        checkUser(user);
+    @GetMapping("/users/{id}")
+    public User getUserById(@PathVariable int id) {
+        log.info("get user by id");
 
-        if (!users.containsKey(userId)) {
-            log.info("wrong id update user");
-            throw new WrongUserInputException("User with the id doesn't exist");
-        }
+        return userService.getUser(id);
+    }
 
-        users.put(userId, user);
-        log.info("User updated");
-        return user;
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable int id, @PathVariable int friendId) {
+        log.info("add friend controller");
+
+        userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        log.info("delete friend controller");
+
+        userService.deleteFriend(id, friendId);
+    }
+
+    @GetMapping("/users/{id}/friends")
+    public List<User> getFriendsList(@PathVariable int id) {
+        log.info("get friends list controller");
+
+        return userService.getFriendsList(id);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriendsList(@PathVariable int id, @PathVariable int otherId) {
+        log.info("get common friends controller");
+
+        return userService.getCommonFriends(id, otherId);
     }
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        checkUsersListExistence();
-        log.info("All users printed");
-        return new ArrayList<>(users.values());
+        return userService.getAllUsers();
     }
 
-    private void checkUser(User user) {
-        if (user.getLogin().contains(" ")) {
-            log.info("Incorrect user login err");
-            throw new WrongUserInputException("Incorrect user login!");
-        }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.info("Wrong bd err");
-            throw new WrongUserInputException("You have a time machine! Don't ya?");
-        }
-
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        if (user.getId() == -1) {
-            user.setId(id);
-            id++;
-        }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException e) {
+        return Map.of("Validation error", e.getMessage());
     }
 
-    private void checkUsersListExistence() {
-        if (users.isEmpty()) {
-            log.info("User list empty error");
-            throw new UserListException("User list is empty");
-        }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationException(final ValidationException e) {
+        return Map.of("Validation error", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleObjectExistenceException(final ObjectExistenceException e) {
+        return Map.of("Object doesn't found", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleRuntimeError(final Exception e) {
+        return Map.of("Server error!", e.getMessage());
     }
 
     public void clearUserList() {
-        users = new HashMap<>();
-        id = 1;
-    }
-
-    private void setIdForUser(User user) {
-        user.setId(id);
-        id++;
+        userService.clearUserList();
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,7 +28,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
+        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1), new HashSet<>());
     }
 
     @AfterEach
@@ -95,15 +96,15 @@ public class UserControllerTest {
     }
 
     @Test
-    void getAllUsers_EmptyList_AndExpect500() {
+    void getAllUsers_EmptyList_AndExpect404() {
         ResponseEntity<User> response = restTemplate.getForEntity("/users", User.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
     }
 
     @Test
-    void addUser_WithBDFromFuture_AndExpect500() {
+    void addUser_WithBDFromFuture_AndExpect400() {
         user.setBirthday(LocalDate.now().plusDays(1));
         ResponseEntity<User> response = restTemplate.postForEntity("/users", user, User.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 }

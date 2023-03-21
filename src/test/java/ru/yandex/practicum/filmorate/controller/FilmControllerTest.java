@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -44,9 +45,10 @@ public class FilmControllerTest {
             .registerModule(new JavaTimeModule());
 
     @Test
-    public void getEmptyFilms_AndExpect500() {
-        ResponseEntity<Film> response = restTemplate.getForEntity("/films", Film.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+    public void getEmptyFilms_AndExpect200() {
+        ResponseEntity<Film[]> response = restTemplate.getForEntity("/films", Film[].class);
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(response.getBody(), is(new Film[]{}));
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -55,7 +57,7 @@ public class FilmControllerTest {
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody().getId(), notNullValue());
+        assertThat(Objects.requireNonNull(response.getBody()).getId(), notNullValue());
         assertThat(response.getBody(), is(film));
     }
 
@@ -68,30 +70,30 @@ public class FilmControllerTest {
     }
 
     @Test
-    public void addFilm_WithDescriptionLongerThan200Chars_AndExpect500() {
+    public void addFilm_WithDescriptionLongerThan200Chars_AndExpect400() {
         String desc = "aa".repeat(101);
         film.setDescription(desc);
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void addFilm_WithTooEarlyReleaseDate_AndExpect500() {
+    public void addFilm_WithTooEarlyReleaseDate_AndExpect400() {
         film.setReleaseDate(LocalDate.of(1800, 1, 1));
 
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
-    public void addFilm_WithNegativeDuration_AndExpect500() {
+    public void addFilm_WithNegativeDuration_AndExpect400() {
         film.setDuration(-10);
 
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
-        assertThat(response.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
@@ -117,6 +119,6 @@ public class FilmControllerTest {
         ResponseEntity<Film[]> response = restTemplate.getForEntity("/films", Film[].class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody()[0].getName(), is("God Son"));
+        assertThat(Objects.requireNonNull(response.getBody())[0].getName(), is("God Son"));
     }
 }
