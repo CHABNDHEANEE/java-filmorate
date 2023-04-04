@@ -11,6 +11,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Rating;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -32,8 +34,8 @@ public class FilmControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        film = new Film(1, "God Father", "Film about father",
-                LocalDate.now(), 240);
+        film = new Film(1, "God Father", Genre.COMEDY, "Film about father",
+                LocalDate.now(), 240, Rating.PG);
     }
 
     @AfterEach

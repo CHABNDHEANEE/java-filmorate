@@ -20,12 +20,16 @@ public class Film {
     private int id = 0;
     @NotBlank
     private String name;
+    @NotNull
+    private Genre genre;
     @NotBlank
     private String description;
     @NotNull
     private LocalDate releaseDate;
     @NotNull
     private int duration;
+    @NotNull
+    private Rating mpaRating;
     final private Set<Integer> userLiked = new HashSet<>();
 
     public void like(User user) {
