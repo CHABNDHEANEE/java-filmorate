@@ -19,7 +19,7 @@ public class Film {
     @Builder.Default
     private int id = 0;
     @NotBlank
-    private String name;
+    private String title;
     @NotBlank
     private String description;
     @NotNull

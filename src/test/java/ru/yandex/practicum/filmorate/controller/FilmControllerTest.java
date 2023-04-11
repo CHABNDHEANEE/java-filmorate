@@ -63,7 +63,7 @@ public class FilmControllerTest {
 
     @Test
     public void addFilm_WithBlankName_AndExpect400() {
-        film.setName("       ");
+        film.setTitle("       ");
         ResponseEntity<Film> response = restTemplate.postForEntity("/films", film, Film.class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
@@ -112,13 +112,13 @@ public class FilmControllerTest {
     public void updateFilm_AndExpect200() {
         restTemplate.postForEntity("/films", film, Film.class);
 
-        film.setName("God Son");
+        film.setTitle("God Son");
 
         restTemplate.put("/films", film);
 
         ResponseEntity<Film[]> response = restTemplate.getForEntity("/films", Film[].class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(Objects.requireNonNull(response.getBody())[0].getName(), is("God Son"));
+        assertThat(Objects.requireNonNull(response.getBody())[0].getTitle(), is("God Son"));
     }
 }
