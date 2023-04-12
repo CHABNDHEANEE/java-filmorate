@@ -76,6 +76,28 @@ public class UserDaoImpl implements UserDao {
         jdbcTemplate.update(sql,
                 getUserById(userId).getId(),
                 getUserById(friendId).getId());
+
+        checkConfirmation(userId, friendId);
+    }
+
+    private void checkConfirmation(int userId, int friendId) {
+        String sql =
+                "UPDATE friends AS f1 " +
+                        "SET friendship_status_id = 2 " +
+                        "WHERE user_id = ? AND user_id IN ( " +
+                        "SELECT f2.friend_id FROM friends AS f2 " +
+                        "WHERE f2.user_id = ? AND f2.user_id = f1.friend_id)";
+
+        jdbcTemplate.update(sql, userId, friendId);
+
+        sql =
+                "UPDATE friends AS f1 " +
+                        "SET friendship_status_id = 2 " +
+                        "WHERE user_id = ? AND user_id NOT IN ( " +
+                        "SELECT f2.friend_id FROM friends AS f2 " +
+                        "WHERE f2.user_id = ? AND f2.user_id = f1.friend_id)";
+
+        jdbcTemplate.update(sql, userId, friendId);
     }
 
     @Override
