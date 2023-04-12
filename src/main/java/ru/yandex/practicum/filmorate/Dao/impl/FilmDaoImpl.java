@@ -90,6 +90,10 @@ public class FilmDaoImpl implements FilmDao {
                 film.getMpa().getId(),
                 film.getId());
 
+        genreDao.deleteGenresForFilm(film.getId());
+        List<FilmGenre> filmGenres = genreDao.addGenresToFilm(film.getId(), film.getGenres());
+        film.setGenres(filmGenres);
+
         return getFilmById(film.getId());
     }
 

@@ -36,9 +36,20 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     @Override
+    public void deleteGenresForFilm(int filmId) {
+        String sql =
+                "DELETE FROM film_genre " +
+                        "WHERE film_id = ?";
+
+        jdbcTemplate.update(sql, filmId);
+    }
+
+    @Override
     public List<FilmGenre> addGenresToFilm(int filmId, List<FilmGenre> genres) {
         String sql =
-                "INSERT INTO film_genre (film_id, genre_id) " +
+                "MERGE INTO film_genre " +
+                        "(film_id, genre_id) " +
+                        "KEY(film_id, genre_id) " +
                         "VALUES (?, ?)";
 
         if (genres == null || genres.isEmpty()) {
@@ -54,7 +65,7 @@ public class GenreDaoImpl implements GenreDao {
     @Override
     public FilmGenre getGenreById(int genreId) {
         String sql =
-                "SELECT * FROM film_genre WHERE genre_id = ?";
+                "SELECT * FROM genres WHERE genre_id = ?";
 
         return jdbcTemplate.queryForObject(sql, this::makeGenre, genreId);
     }

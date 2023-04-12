@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.FilmGenre;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -24,13 +26,17 @@ public class FilmDbServiceTest {
     private Film film;
     private Film film2;
     private User user;
+    private FilmGenre genre;
+    private FilmRating mpa;
 
     @BeforeEach
     void beforeEach() {
-        film = new Film(1, "God Father", 1, "Film about father",
-                LocalDate.now(), 240, 1);
-        film2 = new Film(2, "God Father", 1, "Film about father",
-                LocalDate.now(), 240, 1);
+        genre = new FilmGenre(1);
+        mpa = new FilmRating(1);
+        film = new Film(1, "God Father", List.of(genre), "Film about father",
+                LocalDate.now(), 240, mpa);
+        film2 = new Film(2, "God Father", List.of(genre), "Film about father",
+                LocalDate.now(), 240, mpa);
         user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     }
 
