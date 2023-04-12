@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.Dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Dao.FilmDao;
@@ -10,12 +11,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class FilmDaoImpl implements FilmDao {
     final JdbcTemplate jdbcTemplate;
-
-    public FilmDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public Film addFilm(Film film) {

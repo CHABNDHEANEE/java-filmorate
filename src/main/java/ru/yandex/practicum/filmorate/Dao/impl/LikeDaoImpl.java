@@ -2,8 +2,7 @@ package ru.yandex.practicum.filmorate.Dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Dao.FilmDao;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Dao.LikeDao;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -12,10 +11,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Service
+@Component
 public class LikeDaoImpl implements LikeDao {
     private final JdbcTemplate jdbcTemplate;
-    private final FilmDao filmDao;
 
     @Override
     public void like(int userId, int filmId) {

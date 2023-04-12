@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.Dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Dao.UserDao;
@@ -10,13 +11,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
 
     final JdbcTemplate jdbcTemplate;
-
-    public UserDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public User addUser(User user) {
