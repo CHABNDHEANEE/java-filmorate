@@ -54,6 +54,26 @@ public class FilmDaoImpl implements FilmDao {
     }
 
     @Override
+    public Film updateFilm(Film film) {
+        String sql =
+                "UPDATE films SET " +
+                        "film_title = ?, film_genre_id = ?, film_description = ?, " +
+                        "film_release_date = ?, film_duration = ?, film_rating_id = ? " +
+                        "WHERE film_id = ?";
+
+        jdbcTemplate.update(sql,
+                film.getTitle(),
+                film.getGenreId(),
+                film.getDescription(),
+                film.getReleaseDate(),
+                film.getDuration(),
+                film.getRatingId(),
+                film.getId());
+
+        return film;
+    }
+
+    @Override
     public List<Film> getFilmsList(int max) {
         String sql =
                 "SELECT * FROM films LIMIT ?";

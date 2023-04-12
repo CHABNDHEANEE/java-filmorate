@@ -27,4 +27,8 @@ public class FilmDbService {
     public Film getFilmById(int filmId) {
         return filmDao.getFilmById(filmId);
     }
+
+    public Film updateFilm(Film film) {
+        return filmDao.updateFilm(film);
+    }
 }

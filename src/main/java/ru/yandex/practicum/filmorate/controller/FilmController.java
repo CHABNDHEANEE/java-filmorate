@@ -27,10 +27,10 @@ public class FilmController {
         return filmService.addFilm(film);
     }
 
-//    @PutMapping("/films")
-//    public Film updateFilm(@Valid @RequestBody Film film) {
-//        return filmService.updateFilm(film);
-//    }
+    @PutMapping("/films")
+    public Film updateFilm(@Valid @RequestBody Film film) {
+        return filmService.updateFilm(film);
+    }
 
     @GetMapping("/films/{id}")
     public Film getFilmById(@PathVariable int id) {
