@@ -9,7 +9,7 @@ public interface GenreDao {
 
     List<FilmGenre> getGenresListForFilm(int filmId);
 
-    void addGenresToFilm(int filmId, List<FilmGenre> genres);
+    List<FilmGenre> addGenresToFilm(int filmId, List<FilmGenre> genres);
 
     FilmGenre getGenreById(int genreId);
 }

@@ -19,7 +19,6 @@ public class FilmDbService {
     private final GenreDao genreDao;
     public Film addFilm(Film film) {
         film.setMpa(ratingDao.getRatingById(film.getMpa().getId()));
-        film.setGenres(genreDao.getGenresListForFilm(film.getId()));
         return filmDao.addFilm(film);
     }
 

@@ -35,13 +35,18 @@ public class LikeDaoImpl implements LikeDao {
         String sql =
                 "DELETE FROM users_liked_films WHERE user_id = ? AND film_id = ?";
 
+
+
         jdbcTemplate.update(sql, userId, filmId);
     }
 
     @Override
-    public List<Film> getMostPopularFilms(int filmsCount) {
+    public List<Film> getMostPopularFilms(Integer filmsCount) {
+        if (filmsCount == null) {
+            filmsCount = 10;
+        }
         String sql =
-                "SELECT f.* " +
+                "SELECT f.*, COUNT(l.user_id) " +
                         "FROM films AS f " +
                         "LEFT OUTER JOIN users_liked_films AS l " +
                         "ON l.film_id = f.film_id " +

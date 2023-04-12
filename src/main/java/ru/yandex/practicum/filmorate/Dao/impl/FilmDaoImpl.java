@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.Dao.FilmDao;
 import ru.yandex.practicum.filmorate.Dao.GenreDao;
 import ru.yandex.practicum.filmorate.Dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.FilmGenre;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -45,7 +46,12 @@ public class FilmDaoImpl implements FilmDao {
             return stmt;
         }, keyHolder);
 
-        return getFilmById((int) keyHolder.getKey().longValue());
+        int id = (int) keyHolder.getKey().longValue();
+
+        List<FilmGenre> filmGenres = genreDao.addGenresToFilm(id, film.getGenres());
+        film.setGenres(filmGenres);
+
+        return getFilmById(id);
     }
 
     @Override
@@ -60,7 +66,7 @@ public class FilmDaoImpl implements FilmDao {
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("film_title"))
-                .genres(new ArrayList<>())
+                .genres(genreDao.getGenresListForFilm(rs.getInt("film_id")))
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))

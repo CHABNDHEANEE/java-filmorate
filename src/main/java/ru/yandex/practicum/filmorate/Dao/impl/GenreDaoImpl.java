@@ -20,7 +20,7 @@ public class GenreDaoImpl implements GenreDao {
     @Override
     public List<FilmGenre> getGenresList() {
         String sql =
-                "SELECT * FROM film_genre";
+                "SELECT * FROM genres";
 
         return jdbcTemplate.query(sql, this::makeGenre);
     }
@@ -28,7 +28,7 @@ public class GenreDaoImpl implements GenreDao {
     @Override
     public List<FilmGenre> getGenresListForFilm(int filmId) {
         String sql =
-                "SELECT fg.*, g.* FROM film_genre AS fg " +
+                "SELECT fg.*, g.genre_title FROM film_genre AS fg " +
                         "JOIN genres AS g ON g.genre_id = fg.genre_id " +
                         "WHERE fg.film_id = ?";
 
@@ -36,14 +36,19 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     @Override
-    public void addGenresToFilm(int filmId, List<FilmGenre> genres) {
+    public List<FilmGenre> addGenresToFilm(int filmId, List<FilmGenre> genres) {
         String sql =
                 "INSERT INTO film_genre (film_id, genre_id) " +
                         "VALUES (?, ?)";
 
+        if (genres == null || genres.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         for (FilmGenre genre : genres) {
             jdbcTemplate.update(sql, filmId, genre.getId());
         }
+        return getGenresListForFilm(filmId);
     }
 
     @Override
@@ -55,7 +60,8 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     private FilmGenre makeGenre(ResultSet rs, int rowNum) throws SQLException {
-        return new FilmGenre(rs.getInt("genre_id"),
+        FilmGenre result = new FilmGenre(rs.getInt("genre_id"),
                 rs.getString("genre_title"));
+        return result;
     }
 }

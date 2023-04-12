@@ -65,7 +65,7 @@ create table IF NOT EXISTS GENRES
     constraint FILM_GENRE_PK
         primary key (GENRE_ID)
 );
-create table FILM_GENRE
+create table IF NOT EXISTS FILM_GENRE
 (
     FILM_ID  INTEGER not null,
     GENRE_ID INTEGER not null,

@@ -1,10 +1,10 @@
-INSERT INTO FILM_GENRE (GENRE_TITLE)
-VALUES ('Comedy'),
-       ('Drama'),
-       ('Cartoon'),
-       ('Thriller'),
-       ('Documentary'),
-       ('Action');
+INSERT INTO GENRES (GENRE_TITLE)
+VALUES ('Комедия'),
+       ('Драма'),
+       ('Мультфильм'),
+       ('Триллер'),
+       ('Документальный'),
+       ('Боевик');
 
 INSERT INTO FILM_RATING (RATING_NAME)
 VALUES ('G'),
