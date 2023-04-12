@@ -21,15 +21,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
     private final UserDbService userService;
-    @PostMapping("/users/")
+    @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
         return userService.addUser(user);
     }
 
-//    @PutMapping("/users")
-//    public User updateUser(@Valid @RequestBody User user) {
-//        return userService.updateUser(user);
-//    }
+    @PutMapping("/users")
+    public User updateUser(@Valid @RequestBody User user) {
+        return userService.updateUser(user);
+    }
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable int id) {
@@ -38,7 +38,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @GetMapping("/users/")
+    @GetMapping("/users")
     public List<User> getAllUsers() {
         log.info("get user by id");
 

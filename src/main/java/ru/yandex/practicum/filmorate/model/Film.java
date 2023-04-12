@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class Film {
     @Builder.Default
-    private int id = 0;
+    private int id = 1;
     @NotBlank
     private String title;
     @NotNull

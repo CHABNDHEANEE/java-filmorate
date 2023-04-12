@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Dao.FilmDao;
@@ -9,12 +10,9 @@ import java.util.List;
 
 @Service
 @Qualifier
+@RequiredArgsConstructor
 public class FilmDbService {
-    final FilmDao filmDao;
-
-    public FilmDbService(FilmDao filmDao) {
-        this.filmDao = filmDao;
-    }
+    private final FilmDao filmDao;
 
     public Film addFilm(Film film) {
         return filmDao.addFilm(film);

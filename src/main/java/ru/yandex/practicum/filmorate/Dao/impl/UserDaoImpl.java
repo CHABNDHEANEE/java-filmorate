@@ -2,12 +2,17 @@ package ru.yandex.practicum.filmorate.Dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Dao.UserDao;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.List;
 
 @Component
@@ -23,13 +28,20 @@ public class UserDaoImpl implements UserDao {
                         "(user_email, user_login, user_name, user_birthday) " +
                 "VALUES (?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql,
-                user.getEmail(),
-                user.getLogin(),
-                user.getName(),
-                user.getBirthday());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        return user;
+        java.sql.Date sqlDate = Date.valueOf(user.getBirthday());
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"user_id"});
+            stmt.setString(1, user.getEmail());
+            stmt.setString(2, user.getLogin());
+            stmt.setString(3, user.getName());
+            stmt.setDate(4, sqlDate);
+            return stmt;
+        }, keyHolder);
+
+        return getUserById((int) keyHolder.getKey().longValue());
     }
 
     @Override
