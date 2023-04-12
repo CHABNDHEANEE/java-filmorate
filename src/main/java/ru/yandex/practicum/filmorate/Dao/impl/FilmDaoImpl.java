@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Dao.FilmDao;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -32,12 +33,12 @@ public class FilmDaoImpl implements FilmDao {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"film_id"});
-            stmt.setString(1, film.getTitle());
+            stmt.setString(1, film.getName());
             stmt.setInt(2, film.getGenreId());
             stmt.setString(3, film.getDescription());
             stmt.setDate(4, sqlDate);
             stmt.setInt(5, film.getDuration());
-            stmt.setInt(6, film.getRatingId());
+            stmt.setInt(6, film.getMpa().getId());
             return stmt;
         }, keyHolder);
 
@@ -55,12 +56,12 @@ public class FilmDaoImpl implements FilmDao {
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
         return Film.builder()
                 .id(rs.getInt("film_id"))
-                .title(rs.getString("film_title"))
+                .name(rs.getString("film_title"))
                 .genreId(rs.getInt("film_genre_id"))
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
-                .ratingId(rs.getInt("film_rating_id"))
+                .mpa(new FilmRating(rs.getInt("film_rating_id")))
                 .build();
     }
 
@@ -73,12 +74,12 @@ public class FilmDaoImpl implements FilmDao {
                         "WHERE film_id = ?";
 
         jdbcTemplate.update(sql,
-                film.getTitle(),
+                film.getName(),
                 film.getGenreId(),
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                film.getRatingId(),
+                film.getMpa(),
                 film.getId());
         return film;
     }

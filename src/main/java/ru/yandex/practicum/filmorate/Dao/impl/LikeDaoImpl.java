@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Dao.LikeDao;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,12 +50,12 @@ public class LikeDaoImpl implements LikeDao {
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
         return Film.builder()
                 .id(rs.getInt("film_id"))
-                .title(rs.getString("film_title"))
+                .name(rs.getString("film_title"))
                 .genreId(rs.getInt("film_genre_id"))
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
-                .ratingId(rs.getInt("film_rating_id"))
+                .mpa(new FilmRating(rs.getInt("film_rating_id")))
                 .build();
     }
 }

@@ -3,12 +3,12 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.auxilary.IsAfter;
 
 import java.time.LocalDate;
 
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
@@ -17,15 +17,18 @@ public class Film {
     @Builder.Default
     private int id = 1;
     @NotBlank
-    private String title;
+    private String name;
     @NotNull
     private int genreId;
     @NotBlank
+    @Size(max = 200)
     private String description;
     @NotNull
+    @IsAfter(current = "1895-12-28")
     private LocalDate releaseDate;
     @NotNull
+    @Min(value = 0)
     private int duration;
     @NotNull
-    private int ratingId;
+    private FilmRating mpa;
 }
