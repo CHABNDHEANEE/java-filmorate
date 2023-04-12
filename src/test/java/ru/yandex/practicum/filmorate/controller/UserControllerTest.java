@@ -32,9 +32,9 @@ public class UserControllerTest {
     }
 
     @AfterEach
-    void afterEach() {
-        userController.clearUserList();
-    }
+//    void afterEach() {
+//        userController.clearUserList();
+//    }
 
     @Test
     void addUser_WithNickAndEmail_AndExpect200() {

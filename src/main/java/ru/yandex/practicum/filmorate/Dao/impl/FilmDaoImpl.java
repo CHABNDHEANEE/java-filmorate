@@ -50,6 +50,7 @@ public class FilmDaoImpl implements FilmDao {
                 .genreId(rs.getInt("film_genre_id"))
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
+                .duration(rs.getInt("film_duration"))
                 .ratingId(rs.getInt("film_rating_id"))
                 .build();
     }

@@ -32,13 +32,13 @@ public class FilmControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        film = new Film(1, "God Father", "Film about father",
-                LocalDate.now(), 240);
+        film = new Film(1, "God Father", 1, "Film about father",
+                LocalDate.now(), 240, 1);
     }
 
     @AfterEach
     void afterEach() {
-        controller.clearFilmsList();
+//        controller.clearFilmsList();
     }
 
     ObjectMapper objectMapper = new ObjectMapper()
