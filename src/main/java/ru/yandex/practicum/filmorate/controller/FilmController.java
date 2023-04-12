@@ -46,27 +46,6 @@ public class FilmController {
         return filmService.getFilmsList(10);
     }
 
-//    @PutMapping("/films/{id}/like/{userId}")
-//    public void likeFilm(@PathVariable int id, @PathVariable int userId) {
-//        log.info("like film controller");
-//
-//        filmService.like(id, userId);
-//    }
-
-//    @DeleteMapping("/films/{id}/like/{userId}")
-//    public void unlikeFilm(@PathVariable int id, @PathVariable int userId) {
-//        log.info("unlike film controller");
-//
-//        filmService.unlike(id, userId);
-//    }
-
-//    @GetMapping("/films/popular")
-//    public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
-//        log.info("get best films.");
-//
-//        return filmService.getMostPopularFilms(count);
-//    }
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationExceptions( final
