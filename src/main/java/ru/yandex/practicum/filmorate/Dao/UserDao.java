@@ -15,6 +15,8 @@ public interface UserDao {
 
     void addFriend(int userId, int friendId);
 
+    void deleteFriend(int userId, int friendId);
+
     List<User> getUsersList(int max);
 
     User updateUser(User user);

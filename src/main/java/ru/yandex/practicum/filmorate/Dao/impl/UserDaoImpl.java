@@ -6,19 +6,18 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.Dao.UserDao;
+import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZoneId;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
-
     final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -27,6 +26,10 @@ public class UserDaoImpl implements UserDao {
                 "INSERT INTO users " +
                         "(user_email, user_login, user_name, user_birthday) " +
                 "VALUES (?, ?, ?, ?)";
+
+        if (user.getName().isBlank()) {
+            user.setName(user.getLogin());
+        }
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -48,27 +51,38 @@ public class UserDaoImpl implements UserDao {
     public User updateUser(User user) {
         String sql =
                 "UPDATE users SET " +
-                        "user_email = ?, user_login = ?, user_name = ?, user_birthday = ?" +
+                        "user_email = ?, user_login = ?, user_name = ?, user_birthday = ? " +
                         "WHERE user_id = ?";
 
-        jdbcTemplate.update(sql,
+        int changed = jdbcTemplate.update(sql,
                 user.getEmail(),
                 user.getLogin(),
                 user.getName(),
                 user.getBirthday(),
                 user.getId());
 
+        if (changed == 0) {
+            throwObjectExistenceException();
+        }
+
         return getUserById(user.getId());
     }
 
     @Override
     public void addFriend(int userId, int friendId) {
-        String sql = "INSERT INTO friends (user_id, friend_id, friendship_status_id)" +
+        String sql = "INSERT INTO friends (user_id, friend_id, friendship_status_id) " +
                 "VALUES (?, ?, 1)";
 
         jdbcTemplate.update(sql,
-                getUserById(userId),
-                getUserById(friendId));
+                getUserById(userId).getId(),
+                getUserById(friendId).getId());
+    }
+
+    @Override
+    public void deleteFriend(int userId, int friendId) {
+        String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
+
+        jdbcTemplate.update(sql, userId, friendId);
     }
 
     @Override
@@ -92,10 +106,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getFriends(int userId) {
         String sql =
-                        "SELECT u.*" +
+                        "SELECT u.* " +
                         "FROM friends AS f " +
                         "JOIN users AS u " +
-                        "ON f.friend_id = u.user_id" +
+                        "ON f.friend_id = u.user_id " +
                         "WHERE f.user_id = ?";
 
         return jdbcTemplate.query(sql, this::makeUser, userId);
@@ -105,23 +119,23 @@ public class UserDaoImpl implements UserDao {
     public List<User> getCommonFriends(int userId, int friendId) {
         String sql =
                         "WITH u1 AS (" +
-                                "SELECT u.*" +
+                                "SELECT u.* " +
                                 "FROM friends AS f " +
                                 "JOIN users AS u " +
-                                "ON f.friend_id = u.user_id" +
-                                "WHERE f.user_id = ?" +
+                                "ON f.friend_id = u.user_id " +
+                                "WHERE f.user_id = ? " +
                                 "), " +
-                        "u2 AS (" +
-                                "SELECT u.*" +
+                        "u2 AS ( " +
+                                "SELECT u.* " +
                                 "FROM friends AS f " +
                                 "JOIN users AS u " +
-                                "ON f.friend_id = u.user_id" +
-                                "WHERE f.user_id = ?" +
-                                ")" +
-                        "SELECT u1.*" +
-                                "FROM u1" +
-                                "JOIN u2" +
-                                "ON u1.user_id = u2.user_id";
+                                "ON f.friend_id = u.user_id " +
+                                "WHERE f.user_id = ? " +
+                                ") " +
+                        "SELECT u1.* " +
+                                "FROM u1 " +
+                                "JOIN u2 " +
+                                "ON u1.user_id = u2.user_id ";
 
         return jdbcTemplate.query(sql, this::makeUser, userId, friendId);
     }
@@ -134,5 +148,9 @@ public class UserDaoImpl implements UserDao {
                         "LIMIT ?";
 
         return jdbcTemplate.query(sql, this::makeUser, max);
+    }
+
+    private void throwObjectExistenceException() {
+        throw new ObjectExistenceException("User Not Found");
     }
 }

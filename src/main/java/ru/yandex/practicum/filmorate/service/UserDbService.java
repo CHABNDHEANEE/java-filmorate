@@ -22,11 +22,7 @@ public class UserDbService {
     }
 
     public User updateUser(User user) {
-        try {
-            return userDao.updateUser(user);
-        } catch (NullPointerException e) {
-            throw new ObjectExistenceException("User not found");
-        }
+        return userDao.updateUser(user);
     }
 
     public void addFriend(int userId, int friendId) {
@@ -47,5 +43,9 @@ public class UserDbService {
 
     public List<User> getUsersList(int max) {
         return userDao.getUsersList(max);
+    }
+
+    public void deleteFriend(int userId, int friendId) {
+
     }
 }

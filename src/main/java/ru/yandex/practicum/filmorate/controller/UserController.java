@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,12 +53,12 @@ public class UserController {
         userService.addFriend(id, friendId);
     }
 
-//    @DeleteMapping("/users/{id}/friends/{friendId}")
-//    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
-//        log.info("delete friend controller");
-//
-//        userService.deleteFriend(id, friendId);
-//    }
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        log.info("delete friend controller");
+
+        userService.deleteFriend(id, friendId);
+    }
 
     @GetMapping("/users/{id}/friends")
     public List<User> getFriendsList(@PathVariable int id) {
@@ -89,6 +90,12 @@ public class UserController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleObjectExistenceException(final ObjectExistenceException e) {
+        return Map.of("Object doesn't found", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleIncorrectResultSizeDataAccessException(final IncorrectResultSizeDataAccessException e) {
         return Map.of("Object doesn't found", e.getMessage());
     }
 

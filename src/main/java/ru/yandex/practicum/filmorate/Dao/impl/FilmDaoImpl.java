@@ -23,7 +23,7 @@ public class FilmDaoImpl implements FilmDao {
     public Film addFilm(Film film) {
         String sql =
                         "INSERT INTO films " +
-                        "(film_title, film_genre_id, film_description, film_release_date, film_duration, film_rating_id)" +
+                        "(film_title, film_genre_id, film_description, film_release_date, film_duration, film_rating_id) " +
                         "VALUES (?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
