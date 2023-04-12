@@ -45,6 +45,23 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User updateUser(User user) {
+        String sql =
+                "UPDATE users SET " +
+                        "user_email = ?, user_login = ?, user_name = ?, user_birthday = ?" +
+                        "WHERE user_id = ?";
+
+        jdbcTemplate.update(sql,
+                user.getEmail(),
+                user.getLogin(),
+                user.getName(),
+                user.getBirthday(),
+                user.getId());
+
+        return getUserById(user.getId());
+    }
+
+    @Override
     public void addFriend(int userId, int friendId) {
         String sql = "INSERT INTO friends (user_id, friend_id, friendship_status_id)" +
                 "VALUES (?, ?, 1)";
