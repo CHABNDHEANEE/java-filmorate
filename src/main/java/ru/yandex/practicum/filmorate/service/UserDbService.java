@@ -46,6 +46,6 @@ public class UserDbService {
     }
 
     public void deleteFriend(int userId, int friendId) {
-
+        userDao.deleteFriend(userId, friendId);
     }
 }
