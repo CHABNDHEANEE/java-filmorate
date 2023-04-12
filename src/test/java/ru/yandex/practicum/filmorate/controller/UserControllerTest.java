@@ -28,7 +28,7 @@ public class UserControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1), new HashSet<>());
+        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     }
 
     @AfterEach

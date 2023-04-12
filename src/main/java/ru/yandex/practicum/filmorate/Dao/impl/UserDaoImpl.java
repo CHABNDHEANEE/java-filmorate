@@ -21,7 +21,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User addUser(User user) {
         String sql =
-                "INSERT INTO USERS (user_email, user_login, user_name, user_birthday) " +
+                "INSERT INTO users " +
+                        "(user_email, user_login, user_name, user_birthday) " +
                 "VALUES (?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
@@ -101,8 +102,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getUsersList(int max) {
         String sql =
-                "SELECT *" +
-                        "FROM users" +
+                "SELECT * " +
+                        "FROM users " +
                         "LIMIT ?";
 
         return jdbcTemplate.query(sql, this::makeUser, max);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -20,22 +20,29 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
-    @PostMapping("/users")
+    private final UserDbService userService;
+    @PostMapping("/users/")
     public User addUser(@Valid @RequestBody User user) {
         return userService.addUser(user);
     }
 
-    @PutMapping("/users")
-    public User updateUser(@Valid @RequestBody User user) {
-        return userService.updateUser(user);
-    }
+//    @PutMapping("/users")
+//    public User updateUser(@Valid @RequestBody User user) {
+//        return userService.updateUser(user);
+//    }
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable int id) {
         log.info("get user by id");
 
-        return userService.getUser(id);
+        return userService.getUserById(id);
+    }
+
+    @GetMapping("/users/")
+    public List<User> getAllUsers() {
+        log.info("get user by id");
+
+        return userService.getUsersList(10);
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")
@@ -45,18 +52,18 @@ public class UserController {
         userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/users/{id}/friends/{friendId}")
-    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
-        log.info("delete friend controller");
-
-        userService.deleteFriend(id, friendId);
-    }
+//    @DeleteMapping("/users/{id}/friends/{friendId}")
+//    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+//        log.info("delete friend controller");
+//
+//        userService.deleteFriend(id, friendId);
+//    }
 
     @GetMapping("/users/{id}/friends")
     public List<User> getFriendsList(@PathVariable int id) {
         log.info("get friends list controller");
 
-        return userService.getFriendsList(id);
+        return userService.getFriends(id);
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")
@@ -64,11 +71,6 @@ public class UserController {
         log.info("get common friends controller");
 
         return userService.getCommonFriends(id, otherId);
-    }
-
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
     }
 
     @ExceptionHandler
@@ -96,7 +98,7 @@ public class UserController {
         return Map.of("Server error!", e.getMessage());
     }
 
-    public void clearUserList() {
-        userService.clearUserList();
-    }
+//    public void clearUserList() {
+//        userService.clearUserList();
+//    }
 }

@@ -16,32 +16,32 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class Film {
     @Builder.Default
     private int id = 0;
     @NotBlank
     private String title;
-    @NotBlank
+    @NotNull
     private int genreId;
     @NotBlank
     private String description;
     @NotNull
-    private Timestamp releaseDate;
+    private LocalDate releaseDate;
     @NotNull
     private int duration;
-    @NotBlank
+    @NotNull
     private int ratingId;
-    final private Set<Integer> userLiked = new HashSet<>();
 
-    public void like(User user) {
-        userLiked.add(user.getId());
-    }
-
-    public void unlike(User user) {
-        userLiked.remove(user.getId());
-    }
-
-    public int getLikes() {
-        return userLiked.size();
-    }
+//    public void like(User user) {
+//        userLiked.add(user.getId());
+//    }
+//
+//    public void unlike(User user) {
+//        userLiked.remove(user.getId());
+//    }
+//
+//    public int getLikes() {
+//        return userLiked.size();
+//    }
 }

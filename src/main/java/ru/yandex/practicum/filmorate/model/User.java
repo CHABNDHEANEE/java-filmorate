@@ -19,13 +19,18 @@ import java.util.Set;
 @Builder
 public class User {
     @Builder.Default
-    private int id = -1;
-    @Email
+    private int id = 0;
     @NotBlank
     private String email;
     @NotBlank
     private String login;
     private String name;
-    @NotNull
     private LocalDate birthday;
+
+//    public User(String email, String login, String name, LocalDate birthday) {
+//        this.email = email;
+//        this.login = login;
+//        this.name = name;
+//        this.birthday = birthday;
+//    }
 }

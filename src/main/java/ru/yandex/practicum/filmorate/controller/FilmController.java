@@ -8,7 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.FilmDbService;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -20,17 +20,17 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class FilmController {
-    private final FilmService filmService;
+    private final FilmDbService filmService;
 
     @PostMapping("/films")
     public Film addFilm(@Valid @RequestBody Film film) {
         return filmService.addFilm(film);
     }
 
-    @PutMapping("/films")
-    public Film updateFilm(@Valid @RequestBody Film film) {
-        return filmService.updateFilm(film);
-    }
+//    @PutMapping("/films")
+//    public Film updateFilm(@Valid @RequestBody Film film) {
+//        return filmService.updateFilm(film);
+//    }
 
     @GetMapping("/films/{id}")
     public Film getFilmById(@PathVariable int id) {
@@ -43,29 +43,29 @@ public class FilmController {
     public List<Film> getAllFilms() {
         log.info("get all films controller");
 
-        return filmService.getAllFilms();
+        return filmService.getFilmsList(10);
     }
 
-    @PutMapping("/films/{id}/like/{userId}")
-    public void likeFilm(@PathVariable int id, @PathVariable int userId) {
-        log.info("like film controller");
+//    @PutMapping("/films/{id}/like/{userId}")
+//    public void likeFilm(@PathVariable int id, @PathVariable int userId) {
+//        log.info("like film controller");
+//
+//        filmService.like(id, userId);
+//    }
 
-        filmService.like(id, userId);
-    }
+//    @DeleteMapping("/films/{id}/like/{userId}")
+//    public void unlikeFilm(@PathVariable int id, @PathVariable int userId) {
+//        log.info("unlike film controller");
+//
+//        filmService.unlike(id, userId);
+//    }
 
-    @DeleteMapping("/films/{id}/like/{userId}")
-    public void unlikeFilm(@PathVariable int id, @PathVariable int userId) {
-        log.info("unlike film controller");
-
-        filmService.unlike(id, userId);
-    }
-
-    @GetMapping("/films/popular")
-    public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
-        log.info("get best films.");
-
-        return filmService.getMostPopularFilms(count);
-    }
+//    @GetMapping("/films/popular")
+//    public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
+//        log.info("get best films.");
+//
+//        return filmService.getMostPopularFilms(count);
+//    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -92,7 +92,7 @@ public class FilmController {
         return Map.of("Server error!", e.getMessage());
     }
 
-    public void clearFilmsList() {
-        filmService.clearFilmsList();
-    }
+//    public void clearFilmsList() {
+//        filmService.clearFilmsList();
+//    }
 }

@@ -1,18 +1,18 @@
-create table FILM_RATING
+create table IF NOT EXISTS FILM_RATING
 (
     RATING_ID   INTEGER auto_increment,
     RATING_NAME CHARACTER VARYING(10) not null,
     constraint "FILM_RATING_pk"
         primary key (RATING_ID)
 );
-create table FILM_GENRE
+create table IF NOT EXISTS FILM_GENRE
 (
     GENRE_ID    INTEGER auto_increment,
     GENRE_TITLE CHARACTER VARYING(20) not null,
     constraint "FILM_GENRE_pk"
         primary key (GENRE_ID)
 );
-create table FILMS
+create table IF NOT EXISTS FILMS
 (
     FILM_ID           INTEGER auto_increment,
     FILM_TITLE        CHARACTER VARYING(50) not null,
@@ -30,24 +30,24 @@ create table FILMS
 );
 
 
-create table FRIENDSHIP_STATUS
+create table IF NOT EXISTS FRIENDSHIP_STATUS
 (
     STATUS_ID   INTEGER auto_increment,
     STATUS_NAME CHARACTER VARYING(20) not null,
     constraint "FRIENDSHIP_STATUS_pk"
         primary key (STATUS_ID)
 );
-create table USERS
+create table IF NOT EXISTS USERS
 (
     USER_ID             INTEGER auto_increment,
     USER_EMAIL          CHARACTER VARYING(50) not null,
-    USER_LOGIN          CHARACTER VARYING(50),
-    USER_NAME           DATE                  not null,
-    USER_BIRTHDAY       INTEGER               not null,
+    USER_LOGIN          CHARACTER VARYING(50) not null,
+    USER_NAME           CHARACTER VARYING(50),
+    USER_BIRTHDAY       DATE,
     constraint USERS_PK
         primary key (USER_ID)
 );
-create table FRIENDS
+create table IF NOT EXISTS FRIENDS
 (
     USER_ID              INTEGER not null,
     FRIEND_ID            INTEGER not null,
@@ -59,7 +59,7 @@ create table FRIENDS
     constraint "FRIENDS_USERS_USER_ID_fk2"
         foreign key (FRIEND_ID) references USERS
 );
-create table USERS_LIKED_FILM
+create table IF NOT EXISTS USERS_LIKED_FILM
 (
     FILM_ID INTEGER not null,
     USER_ID INTEGER not null,
