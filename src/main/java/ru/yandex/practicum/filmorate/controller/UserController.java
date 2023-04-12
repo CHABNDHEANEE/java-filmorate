@@ -105,7 +105,4 @@ public class UserController {
         return Map.of("Server error!", e.getMessage());
     }
 
-//    public void clearUserList() {
-//        userService.clearUserList();
-//    }
 }

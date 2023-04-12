@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.Dao.GenreDao;
 import ru.yandex.practicum.filmorate.Dao.LikeDao;
 import ru.yandex.practicum.filmorate.Dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.FilmRating;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
