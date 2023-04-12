@@ -5,26 +5,16 @@ create table IF NOT EXISTS FILM_RATING
     constraint "FILM_RATING_pk"
         primary key (RATING_ID)
 );
-create table IF NOT EXISTS FILM_GENRE
-(
-    GENRE_ID    INTEGER auto_increment,
-    GENRE_TITLE CHARACTER VARYING(20) not null,
-    constraint "FILM_GENRE_pk"
-        primary key (GENRE_ID)
-);
 create table IF NOT EXISTS FILMS
 (
     FILM_ID           INTEGER auto_increment,
     FILM_TITLE        CHARACTER VARYING(50) not null,
-    FILM_GENRE_ID     INTEGER               not null,
     FILM_DESCRIPTION  CHARACTER VARYING(500),
     FILM_RELEASE_DATE DATE                  not null,
     FILM_DURATION     INTEGER               not null,
     FILM_RATING_ID    INTEGER               not null,
     constraint FILMS_PK
         primary key (FILM_ID),
-    constraint FILMS_FILM_GENRE_GENRE_ID_FK
-        foreign key (FILM_ID) references FILM_GENRE,
     constraint FILMS_FILM_RATING_RATING_ID_FK
         foreign key (FILM_RATING_ID) references FILM_RATING
 );
@@ -68,3 +58,20 @@ create table IF NOT EXISTS USERS_LIKED_FILMS
     constraint "USERS_LIKED_FILM_USERS_USER_ID_fk"
         foreign key (USER_ID) references USERS
 );
+create table IF NOT EXISTS GENRES
+(
+    GENRE_ID    INTEGER auto_increment,
+    GENRE_TITLE CHARACTER VARYING(255) not null,
+    constraint FILM_GENRE_PK
+        primary key (GENRE_ID)
+);
+create table FILM_GENRE
+(
+    FILM_ID  INTEGER not null,
+    GENRE_ID INTEGER not null,
+    constraint "FILM_GENRE_FILMS_FILM_ID_fk"
+        foreign key (FILM_ID) references FILMS,
+    constraint "FILM_GENRE_GENRES_GENRE_ID_fk"
+        foreign key (GENRE_ID) references GENRES
+);
+

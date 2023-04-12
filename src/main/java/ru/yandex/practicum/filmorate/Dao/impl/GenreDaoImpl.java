@@ -3,11 +3,13 @@ package ru.yandex.practicum.filmorate.Dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.Dao.FilmDao;
 import ru.yandex.practicum.filmorate.Dao.GenreDao;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -21,6 +23,27 @@ public class GenreDaoImpl implements GenreDao {
                 "SELECT * FROM film_genre";
 
         return jdbcTemplate.query(sql, this::makeGenre);
+    }
+
+    @Override
+    public List<FilmGenre> getGenresListForFilm(int filmId) {
+        String sql =
+                "SELECT fg.*, g.* FROM film_genre AS fg " +
+                        "JOIN genres AS g ON g.genre_id = fg.genre_id " +
+                        "WHERE fg.film_id = ?";
+
+        return jdbcTemplate.query(sql, this::makeGenre, filmId);
+    }
+
+    @Override
+    public void addGenresToFilm(int filmId, List<FilmGenre> genres) {
+        String sql =
+                "INSERT INTO film_genre (film_id, genre_id) " +
+                        "VALUES (?, ?)";
+
+        for (FilmGenre genre : genres) {
+            jdbcTemplate.update(sql, filmId, genre.getId());
+        }
     }
 
     @Override

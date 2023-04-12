@@ -33,6 +33,6 @@ public class LikeController {
     public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
         log.info("get best films.");
 
-        return likeService.getMostPopularFilms(count);
+        return likeService.getMostPopularFilms(10);
     }
 }

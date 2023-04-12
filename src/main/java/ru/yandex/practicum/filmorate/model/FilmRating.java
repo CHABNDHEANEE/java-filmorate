@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class FilmRating {
     @NotNull
-    private int Id;
-    private String ratingName;
+    private int id;
+    private String name;
 
     public FilmRating(int ratingId) {
-        this.Id = ratingId;
+        this.id = ratingId;
     }
 }

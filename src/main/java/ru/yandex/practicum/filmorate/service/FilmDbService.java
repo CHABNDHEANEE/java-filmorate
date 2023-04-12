@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Dao.FilmDao;
+import ru.yandex.practicum.filmorate.Dao.GenreDao;
+import ru.yandex.practicum.filmorate.Dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
@@ -13,8 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmDbService {
     private final FilmDao filmDao;
-
+    private final RatingDao ratingDao;
+    private final GenreDao genreDao;
     public Film addFilm(Film film) {
+        film.setMpa(ratingDao.getRatingById(film.getMpa().getId()));
+        film.setGenres(genreDao.getGenresListForFilm(film.getId()));
         return filmDao.addFilm(film);
     }
 
@@ -27,6 +32,7 @@ public class FilmDbService {
     }
 
     public Film updateFilm(Film film) {
+        film.setMpa(ratingDao.getRatingById(film.getMpa().getId()));
         return filmDao.updateFilm(film);
     }
 }

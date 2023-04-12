@@ -6,6 +6,8 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.auxilary.IsAfter;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 
 import javax.validation.constraints.*;
@@ -18,8 +20,7 @@ public class Film {
     private int id = 1;
     @NotBlank
     private String name;
-    @NotNull
-    private int genreId;
+    private List<FilmGenre> genres;
     @NotBlank
     @Size(max = 200)
     private String description;
@@ -31,4 +32,8 @@ public class Film {
     private int duration;
     @NotNull
     private FilmRating mpa;
+
+    public void setMpa(FilmRating mpa) {
+        this.mpa = mpa;
+    }
 }
