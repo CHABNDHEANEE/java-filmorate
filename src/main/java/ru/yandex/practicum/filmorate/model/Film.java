@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,11 +22,15 @@ public class Film {
     @NotBlank
     private String title;
     @NotBlank
+    private int genreId;
+    @NotBlank
     private String description;
     @NotNull
-    private LocalDate releaseDate;
+    private Timestamp releaseDate;
     @NotNull
     private int duration;
+    @NotBlank
+    private int ratingId;
     final private Set<Integer> userLiked = new HashSet<>();
 
     public void like(User user) {
