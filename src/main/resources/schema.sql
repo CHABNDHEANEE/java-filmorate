@@ -59,7 +59,7 @@ create table IF NOT EXISTS FRIENDS
     constraint "FRIENDS_USERS_USER_ID_fk2"
         foreign key (FRIEND_ID) references USERS
 );
-create table IF NOT EXISTS USERS_LIKED_FILM
+create table IF NOT EXISTS USERS_LIKED_FILMS
 (
     FILM_ID INTEGER not null,
     USER_ID INTEGER not null,
