@@ -5,9 +5,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.util.List;
 
 public interface FilmDao {
-    public Film addFilm(Film film);
+    Film addFilm(Film film);
 
-    public Film getFilmById(int filmId);
+    Film getFilmById(int filmId);
 
-    public List<Film> getFilmsList(int max);
+    List<Film> getFilmsList(int max);
 }

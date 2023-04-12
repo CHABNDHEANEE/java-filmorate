@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 public class FilmDaoImpl implements FilmDao {
-    JdbcTemplate jdbcTemplate;
+    final JdbcTemplate jdbcTemplate;
 
     public FilmDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

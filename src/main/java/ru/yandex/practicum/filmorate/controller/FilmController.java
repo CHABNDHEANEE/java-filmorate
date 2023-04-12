@@ -92,7 +92,4 @@ public class FilmController {
         return Map.of("Server error!", e.getMessage());
     }
 
-//    public void clearFilmsList() {
-//        filmService.clearFilmsList();
-//    }
 }

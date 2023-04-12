@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class UserDaoImpl implements UserDao {
 
-    JdbcTemplate jdbcTemplate;
+    final JdbcTemplate jdbcTemplate;
 
     public UserDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

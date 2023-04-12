@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @Qualifier
 public class FilmDbService {
-    FilmDao filmDao;
+    final FilmDao filmDao;
 
     public FilmDbService(FilmDao filmDao) {
         this.filmDao = filmDao;

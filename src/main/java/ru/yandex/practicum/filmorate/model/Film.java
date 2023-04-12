@@ -4,11 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-
 
 
 import javax.validation.constraints.NotBlank;
@@ -32,16 +28,4 @@ public class Film {
     private int duration;
     @NotNull
     private int ratingId;
-
-//    public void like(User user) {
-//        userLiked.add(user.getId());
-//    }
-//
-//    public void unlike(User user) {
-//        userLiked.remove(user.getId());
-//    }
-//
-//    public int getLikes() {
-//        return userLiked.size();
-//    }
 }
