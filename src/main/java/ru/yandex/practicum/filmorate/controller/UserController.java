@@ -22,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
     private final UserDbService userService;
+
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
         return userService.addUser(user);
