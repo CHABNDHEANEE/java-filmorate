@@ -70,8 +70,7 @@ public class GenreDaoImpl implements GenreDao {
     }
 
     private FilmGenre makeGenre(ResultSet rs, int rowNum) throws SQLException {
-        FilmGenre result = new FilmGenre(rs.getInt("genre_id"),
+        return new FilmGenre(rs.getInt("genre_id"),
                 rs.getString("genre_title"));
-        return result;
     }
 }

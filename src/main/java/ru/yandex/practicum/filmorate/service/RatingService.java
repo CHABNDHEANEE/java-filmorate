@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RatingService {
     private final RatingDao ratingDao;
+
     public List<FilmRating> getRatingList() {
         return ratingDao.getRatingList();
     }

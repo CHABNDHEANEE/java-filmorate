@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreService {
     private final GenreDao genreDao;
+
     public List<FilmGenre> getGenresList() {
         return genreDao.getGenresList();
     }
