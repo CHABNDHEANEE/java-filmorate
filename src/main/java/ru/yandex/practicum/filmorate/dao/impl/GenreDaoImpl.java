@@ -1,9 +1,9 @@
-package ru.yandex.practicum.filmorate.Dao.impl;
+package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.Dao.GenreDao;
+import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 
 import java.sql.ResultSet;

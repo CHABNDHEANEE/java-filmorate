@@ -3,9 +3,9 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Dao.FilmDao;
-import ru.yandex.practicum.filmorate.Dao.GenreDao;
-import ru.yandex.practicum.filmorate.Dao.RatingDao;
+import ru.yandex.practicum.filmorate.dao.FilmDao;
+import ru.yandex.practicum.filmorate.dao.GenreDao;
+import ru.yandex.practicum.filmorate.dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
