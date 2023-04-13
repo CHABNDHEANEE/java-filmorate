@@ -49,7 +49,7 @@ public class FilmController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationExceptions (final
+    public Map<String, String> handleValidationExceptions(final
             MethodArgumentNotValidException e) {
         return Map.of("Validation error", e.getMessage());
     }

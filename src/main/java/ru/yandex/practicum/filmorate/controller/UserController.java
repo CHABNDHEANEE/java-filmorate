@@ -76,8 +76,7 @@ public class UserController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException e) {
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException e) {
         return Map.of("Validation error", e.getMessage());
     }
 
