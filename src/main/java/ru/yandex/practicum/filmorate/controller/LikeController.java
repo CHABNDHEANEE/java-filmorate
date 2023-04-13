@@ -21,6 +21,7 @@ import java.util.Map;
 @Slf4j
 public class LikeController {
     private final LikeService likeService;
+
     @PutMapping("/films/{id}/like/{userId}")
     public void likeFilm(@PathVariable int id, @PathVariable int userId) {
         log.info("like film controller");
