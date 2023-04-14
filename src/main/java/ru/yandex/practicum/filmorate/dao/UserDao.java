@@ -9,13 +9,13 @@ public interface UserDao {
 
     User getUserById(int userId);
 
-    List<User> getFriends(int userId);
-
-    List<User> getCommonFriends(int userId, int friendId);
-
     void addFriend(int userId, int friendId);
 
     void deleteFriend(int userId, int friendId);
+
+    List<User> getFriends(int userId);
+
+    List<User> getCommonFriends(int userId, int friendId);
 
     List<User> getUsersList(int max);
 
