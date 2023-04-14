@@ -34,8 +34,6 @@ public class LikeDaoImpl implements LikeDao {
         String sql =
                 "DELETE FROM users_liked_films WHERE user_id = ? AND film_id = ?";
 
-
-
         jdbcTemplate.update(sql, userId, filmId);
     }
 

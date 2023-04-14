@@ -80,26 +80,6 @@ public class UserDaoImpl implements UserDao {
         checkConfirmation(userId, friendId);
     }
 
-    private void checkConfirmation(int userId, int friendId) {
-        String sql =
-                "UPDATE friends AS f1 " +
-                        "SET friendship_status_id = 2 " +
-                        "WHERE user_id = ? AND user_id IN ( " +
-                        "SELECT f2.friend_id FROM friends AS f2 " +
-                        "WHERE f2.user_id = ? AND f2.user_id = f1.friend_id)";
-
-        jdbcTemplate.update(sql, userId, friendId);
-
-        sql =
-                "UPDATE friends AS f1 " +
-                        "SET friendship_status_id = 2 " +
-                        "WHERE user_id = ? AND user_id NOT IN ( " +
-                        "SELECT f2.friend_id FROM friends AS f2 " +
-                        "WHERE f2.user_id = ? AND f2.user_id = f1.friend_id)";
-
-        jdbcTemplate.update(sql, userId, friendId);
-    }
-
     @Override
     public void deleteFriend(int userId, int friendId) {
         String sql = "DELETE FROM friends WHERE user_id = ? AND friend_id = ?";
@@ -113,16 +93,6 @@ public class UserDaoImpl implements UserDao {
                 "SELECT * FROM users WHERE user_id = ?";
 
         return jdbcTemplate.queryForObject(sql, this::makeUser, userId);
-    }
-
-    private User makeUser(ResultSet rs, int rowNum) throws SQLException {
-        return User.builder()
-                .id(rs.getInt("user_id"))
-                .email(rs.getString("user_email"))
-                .login(rs.getString("user_login"))
-                .name(rs.getString("user_name"))
-                .birthday(rs.getDate("user_birthday").toLocalDate())
-                .build();
     }
 
     @Override
@@ -170,6 +140,36 @@ public class UserDaoImpl implements UserDao {
                         "LIMIT ?";
 
         return jdbcTemplate.query(sql, this::makeUser, max);
+    }
+
+    private User makeUser(ResultSet rs, int rowNum) throws SQLException {
+        return User.builder()
+                .id(rs.getInt("user_id"))
+                .email(rs.getString("user_email"))
+                .login(rs.getString("user_login"))
+                .name(rs.getString("user_name"))
+                .birthday(rs.getDate("user_birthday").toLocalDate())
+                .build();
+    }
+
+    private void checkConfirmation(int userId, int friendId) {
+        String sql =
+                "UPDATE friends AS f1 " +
+                        "SET friendship_status_id = 2 " +
+                        "WHERE user_id = ? AND user_id IN ( " +
+                        "SELECT f2.friend_id FROM friends AS f2 " +
+                        "WHERE f2.user_id = ? AND f2.user_id = f1.friend_id)";
+
+        jdbcTemplate.update(sql, userId, friendId);
+
+        sql =
+                "UPDATE friends AS f1 " +
+                        "SET friendship_status_id = 2 " +
+                        "WHERE user_id = ? AND user_id NOT IN ( " +
+                        "SELECT f2.friend_id FROM friends AS f2 " +
+                        "WHERE f2.user_id = ? AND f2.user_id = f1.friend_id)";
+
+        jdbcTemplate.update(sql, userId, friendId);
     }
 
     private void throwObjectExistenceException() {

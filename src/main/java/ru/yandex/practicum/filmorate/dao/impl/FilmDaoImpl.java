@@ -61,18 +61,6 @@ public class FilmDaoImpl implements FilmDao {
         return jdbcTemplate.queryForObject(sql, this::makeFilm, filmId);
     }
 
-    private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        return Film.builder()
-                .id(rs.getInt("film_id"))
-                .name(rs.getString("film_title"))
-                .genres(genreDao.getGenresListForFilm(rs.getInt("film_id")))
-                .description(rs.getString("film_description"))
-                .releaseDate(rs.getDate("film_release_date").toLocalDate())
-                .duration(rs.getInt("film_duration"))
-                .mpa(ratingDao.getRatingById(rs.getInt("film_rating_id")))
-                .build();
-    }
-
     @Override
     public Film updateFilm(Film film) {
         String sql =
@@ -102,5 +90,17 @@ public class FilmDaoImpl implements FilmDao {
                 "SELECT * FROM films LIMIT ?";
 
         return jdbcTemplate.query(sql, this::makeFilm, max);
+    }
+
+    private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
+        return Film.builder()
+                .id(rs.getInt("film_id"))
+                .name(rs.getString("film_title"))
+                .genres(genreDao.getGenresListForFilm(rs.getInt("film_id")))
+                .description(rs.getString("film_description"))
+                .releaseDate(rs.getDate("film_release_date").toLocalDate())
+                .duration(rs.getInt("film_duration"))
+                .mpa(ratingDao.getRatingById(rs.getInt("film_rating_id")))
+                .build();
     }
 }
