@@ -21,9 +21,9 @@ import static org.hamcrest.CoreMatchers.is;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class UserDaoTest {
     private final UserDbService userStorage;
-    private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));;
-    private final User user2 = new User(2, "test2@gmail.com", "testLogin2", "Name2", LocalDate.of(2020, 1, 1));;
-    private final User user3 = new User(3, "test3@gmail.com", "testLogin3", "Name3", LocalDate.of(2021, 1, 1));;
+    private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
+    private final User user2 = new User(2, "test2@gmail.com", "testLogin2", "Name2", LocalDate.of(2020, 1, 1));
+    private final User user3 = new User(3, "test3@gmail.com", "testLogin3", "Name3", LocalDate.of(2021, 1, 1));
 
     @Test
     public void testAddUsers() {
