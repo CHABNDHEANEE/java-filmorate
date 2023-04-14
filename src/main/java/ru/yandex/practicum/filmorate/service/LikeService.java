@@ -32,7 +32,7 @@ public class LikeService {
         return likeDao.getMostPopularFilms(filmsCount);
     }
 
-    private void checkExistenceOfUserAndFilm(int userId, int filmId) {
+    private void checkExistenceOfUserAndFilm(int filmId, int userId) {
         userDao.getUserById(userId);
         filmDao.getFilmById(filmId);
     }

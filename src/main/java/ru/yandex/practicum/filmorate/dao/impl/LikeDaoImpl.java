@@ -58,7 +58,7 @@ public class LikeDaoImpl implements LikeDao {
         return Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("film_title"))
-                .genres(new ArrayList<>())
+                .genres(genreDao.getGenresListForFilm(rs.getInt("film_id")))
                 .description(rs.getString("film_description"))
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
