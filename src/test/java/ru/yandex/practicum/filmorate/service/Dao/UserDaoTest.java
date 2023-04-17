@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service.Dao;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,21 +25,25 @@ public class UserDaoTest {
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final User user2 = new User(2, "test2@gmail.com", "testLogin2", "Name2", LocalDate.of(2020, 1, 1));
     private final User user3 = new User(3, "test3@gmail.com", "testLogin3", "Name3", LocalDate.of(2021, 1, 1));
+    private final User user4 = new User(4, "test4@gmail.com", "testLogin4", "Name4", LocalDate.of(2022, 1, 1));
+
+
+    @BeforeEach
+    void beforeEach() {
+        userStorage.addUser(user1);
+        userStorage.addUser(user2);
+        userStorage.addUser(user3);
+    }
 
     @Test
     public void testAddUsers() {
-        User result1 = userStorage.addUser(user1);
-        User result2 = userStorage.addUser(user2);
-        User result3 = userStorage.addUser(user3);
+        User result1 = userStorage.addUser(user4);
 
-        checkUsers(result1, user1);
-        checkUsers(result2, user2);
-        checkUsers(result3, user3);
+        checkUsers(result1, user4);
     }
 
     @Test
     public void testUpdateUser() {
-        testAddUsers();
         User updatedUser = user2;
         updatedUser.setName("UpdatedName");
 
@@ -49,7 +54,6 @@ public class UserDaoTest {
 
     @Test
     public void testFindUserById() {
-        testAddUsers();
         User result1 = userStorage.getUserById(1);
         User result2 = userStorage.getUserById(2);
         User result3 = userStorage.getUserById(3);
@@ -61,16 +65,13 @@ public class UserDaoTest {
 
     @Test
     public void testAddFriends() {
-        testAddUsers();
-        userStorage.addFriend(1, 3);
-        userStorage.addFriend(2, 3);
-        userStorage.addFriend(3, 1);
-        userStorage.addFriend(3, 2);
+        addFriends();
     }
 
     @Test
     public void testGetFriends() {
-        testAddFriends();
+        addFriends();
+
         List<User> result = userStorage.getFriends(1);
         List<User> result2 = userStorage.getFriends(2);
 
@@ -80,7 +81,7 @@ public class UserDaoTest {
 
     @Test
     public void testGetCommonFriends() {
-        testAddFriends();
+        addFriends();
         List<User> result = userStorage.getCommonFriends(1, 2);
 
         checkUsers(result.get(0), user3);
@@ -96,7 +97,6 @@ public class UserDaoTest {
 
     @Test
     public void testGetUsersListWitLimit() {
-        testAddUsers();
         List<User> result = userStorage.getUsersList(2);
 
         assertThat(result.size(), is(2));
@@ -110,5 +110,12 @@ public class UserDaoTest {
         assertThat(result.getLogin(), is(expected.getLogin()));
         assertThat(result.getName(), is(expected.getName()));
         assertThat(result.getBirthday(), is(expected.getBirthday()));
+    }
+
+    private void addFriends() {
+        userStorage.addFriend(1, 3);
+        userStorage.addFriend(2, 3);
+        userStorage.addFriend(3, 1);
+        userStorage.addFriend(3, 2);
     }
 }
