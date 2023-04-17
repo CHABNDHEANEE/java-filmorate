@@ -10,7 +10,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
 
 import java.time.LocalDate;
