@@ -35,8 +35,6 @@ public class FilmDaoTest {
             LocalDate.now(), 240, mpa);
     private final Film film4 = new Film(4, "God Father4", List.of(genre), "Film about father4",
             LocalDate.now(), 240, mpa);
-    private final User user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
-
 
     @BeforeEach
     void beforeEach() {
@@ -44,6 +42,7 @@ public class FilmDaoTest {
         filmService.addFilm(film2);
         filmService.addFilm(film3);
     }
+
     @Test
     public void testAddFilm() {
         Film result1 = filmService.addFilm(film4);
