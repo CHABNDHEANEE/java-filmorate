@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service.Dao;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -32,23 +33,26 @@ public class FilmDaoTest {
             LocalDate.now(), 240, mpa);
     private final Film film3 = new Film(3, "God Father3", List.of(genre), "Film about father3",
             LocalDate.now(), 240, mpa);
+    private final Film film4 = new Film(4, "God Father4", List.of(genre), "Film about father4",
+            LocalDate.now(), 240, mpa);
     private final User user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
 
+
+    @BeforeEach
+    void beforeEach() {
+        filmService.addFilm(film1);
+        filmService.addFilm(film2);
+        filmService.addFilm(film3);
+    }
     @Test
     public void testAddFilm() {
-        Film result1 = filmService.addFilm(film1);
-        Film result2 = filmService.addFilm(film2);
-        Film result3 = filmService.addFilm(film3);
+        Film result1 = filmService.addFilm(film4);
 
-        checkFilm(result1, film1);
-        checkFilm(result2, film2);
-        checkFilm(result3, film3);
+        checkFilm(result1, film4);
     }
 
     @Test
     public void testUpdateFilm() {
-        testAddFilm();
-
         Film updatedFilm = film1;
         updatedFilm.setName("Updated Name");
 
@@ -59,8 +63,6 @@ public class FilmDaoTest {
 
     @Test
     public void testGetFilmById() {
-        testAddFilm();
-
         checkFilm(filmService.getFilmById(1), film1);
         checkFilm(filmService.getFilmById(2), film2);
         checkFilm(filmService.getFilmById(3), film3);
@@ -68,8 +70,6 @@ public class FilmDaoTest {
 
     @Test
     public void testGetFilmsListWithLimit() {
-        testAddFilm();
-
         List<Film> result = filmService.getFilmsList(2);
 
         assertThat(result.size(), is(2));
