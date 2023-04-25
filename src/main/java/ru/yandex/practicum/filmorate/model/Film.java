@@ -31,8 +31,4 @@ public class Film {
     private int duration;
     @NotNull
     private FilmRating mpa;
-
-    public void setMpa(FilmRating mpa) {
-        this.mpa = mpa;
-    }
 }
