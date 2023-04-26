@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
+import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 
@@ -27,7 +28,7 @@ public class FilmDaoImpl implements FilmDao {
     @Override
     public Film addFilm(Film film) {
         String sql =
-                        "INSERT INTO films " +
+                "INSERT INTO films " +
                         "(film_title, film_description, film_release_date, film_duration, film_rating_id) " +
                         "VALUES (?, ?, ?, ?, ?)";
 
@@ -91,6 +92,40 @@ public class FilmDaoImpl implements FilmDao {
 
         return jdbcTemplate.query(sql, this::makeFilm, max);
     }
+
+    @Override
+    public List<Film> findCommonFilmsByUserIdAndFriendId(Integer userId, Integer friendId) {
+        Integer resultSearchByUserId = jdbcTemplate
+                .queryForObject("SELECT count(USER_ID) FROM USERS WHERE USER_ID = ?", Integer.class, userId);
+
+        if (resultSearchByUserId == null || resultSearchByUserId == 0) {
+            throw new ObjectExistenceException("User with id='" + userId + "' not found");
+        }
+
+        Integer resultSearchByFriendId = jdbcTemplate
+                .queryForObject("SELECT count(USER_ID) FROM USERS WHERE USER_ID = ?", Integer.class, friendId);
+
+        if (resultSearchByFriendId == null || resultSearchByFriendId == 0) {
+            throw new ObjectExistenceException("User with id='" + friendId + "' not found");
+        }
+
+        List<Film> films = jdbcTemplate.query(
+                "SELECT * " +
+                        "FROM FILMS f " +
+                        "LEFT JOIN FILM_RATING mpa ON f.FILM_RATING_ID = mpa.RATING_ID " +
+                        "WHERE f.FILM_ID IN " +
+                        "      (SELECT ul.film_id " +
+                        "       FROM USERS_LIKED_FILMS ul " +
+                        "                INNER JOIN USERS_LIKED_FILMS fl ON ul.film_id = fl.film_id " +
+                        "       WHERE ul.user_id = ? AND fl.user_id = ?) " +
+                        "ORDER BY FILM_RATING_ID DESC",
+                this::makeFilm,
+                userId, friendId
+        );
+
+        return films;
+    }
+
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
         return Film.builder()

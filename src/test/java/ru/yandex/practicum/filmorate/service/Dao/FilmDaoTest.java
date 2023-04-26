@@ -10,7 +10,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
+import ru.yandex.practicum.filmorate.service.LikeService;
+import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +29,8 @@ public class FilmDaoTest {
     private final FilmDbService filmService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
+    private final LikeService likeService;
+    private final UserDbService userDbService;
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
             LocalDate.now(), 240, mpa);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
@@ -83,5 +88,35 @@ public class FilmDaoTest {
         assertThat(result.getGenres(), is(expected.getGenres()));
         assertThat(result.getReleaseDate(), is(expected.getReleaseDate()));
         assertThat(result.getDuration(), is(expected.getDuration()));
+    }
+
+
+    @Test
+    void commonFilms() {
+        userDbService.addUser(User
+                .builder().id(1)
+                .name("Mike")
+                .login("mike")
+                .email("mike@mail.ru")
+                .birthday(LocalDate.now())
+                .build());
+        userDbService.addUser(User
+                .builder().id(2)
+                .name("Vasya")
+                .login("mike")
+                .email("vs@mail.ru")
+                .birthday(LocalDate.now())
+                .build());
+
+        likeService.like(film1.getId(), 1);
+        likeService.like(film1.getId(), 2);
+
+        List<Film> expected = List.of(film1);
+
+        List<Film> result = filmService.getCommonFilmsBetweenUserAndFriend(1, 2);
+
+        assertThat(result.size(), is(expected.size()));
+        assertThat(result.get(0), is(expected.get(0)));
+        assertThat(result.get(0).getName(), is(film1.getName()));
     }
 }
