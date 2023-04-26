@@ -2,26 +2,29 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.service.ReviewService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 @Component
+@Validated
 @RequestMapping("/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public Review addReview(@RequestBody Review review) {
+    public Review addReview(@Valid @RequestBody Review review) {
         return reviewService.addReview(review);
     }
 
     @PutMapping
-    public Review updateReview(@RequestBody Review review) {
+    public Review updateReview(@Valid @RequestBody Review review) {
         return reviewService.updateReview(review);
     }
 

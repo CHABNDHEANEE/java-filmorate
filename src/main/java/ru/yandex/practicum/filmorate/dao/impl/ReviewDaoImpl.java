@@ -5,7 +5,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.ReviewDao;
+import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.Review;
 
@@ -19,6 +21,8 @@ import java.util.Objects;
 @Component
 public class ReviewDaoImpl implements ReviewDao {
     private final JdbcTemplate jdbcTemplate;
+    private final FilmDao filmDao;
+    private final UserDao userDao;
 
     @Override
     public Review addReview(Review review) {
@@ -27,12 +31,15 @@ public class ReviewDaoImpl implements ReviewDao {
                         "(content, is_positive, user_id, film_id) " +
                         "VALUES (?, ?, ?, ?)";
 
+        checkFilmExistence(review.getFilmId());
+        checkUserExistence(review.getUserId());
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"review_id"});
             stmt.setString(1, review.getContent());
-            stmt.setBoolean(2, review.isPositive());
+            stmt.setBoolean(2, review.getIsPositive());
             stmt.setInt(3, review.getUserId());
             stmt.setInt(4, review.getFilmId());
             return stmt;
@@ -52,7 +59,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
         int changed = jdbcTemplate.update(sql,
                 review.getContent(),
-                review.isPositive(),
+                review.getIsPositive(),
                 review.getReviewId());
 
         if (changed == 0)
@@ -63,10 +70,10 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public List<Review> getReviewList(int filmId, int count) {
-        String sql = "SELECT * FROM reviews WHERE film_id = ? LIMIT ?";
+        String sql = "SELECT * FROM reviews WHERE film_id = ? ORDER BY useful DESC LIMIT ?";
 
         if (filmId == -1) {
-            sql = "SELECT * FROM reviews LIMIT ?";
+            sql = "SELECT * FROM reviews ORDER BY useful DESC LIMIT ?";
             return jdbcTemplate.query(sql, this::makeReview, count);
         }
 
@@ -90,6 +97,12 @@ public class ReviewDaoImpl implements ReviewDao {
         return jdbcTemplate.queryForObject(sql, this::makeReview, id);
     }
 
+    @Override
+    public void updateReviewUsefulness(int reviewId, int value) {
+        String sql = "UPDATE reviews SET useful = useful + ? WHERE review_id = ?";
+        jdbcTemplate.update(sql, value, reviewId);
+    }
+
     private Review makeReview(ResultSet rs, int rowNum) throws SQLException {
         return Review.builder()
                 .reviewId(rs.getInt("review_id"))
@@ -101,7 +114,15 @@ public class ReviewDaoImpl implements ReviewDao {
                 .build();
     }
 
-        private void throwObjectExistenceException() {
-            throw new ObjectExistenceException("Review Not Found!");
-        }
+    private void throwObjectExistenceException() {
+        throw new ObjectExistenceException("Review Not Found!");
+    }
+
+    private void checkUserExistence(int userId) {
+        userDao.getUserById(userId);
+    }
+
+    private void checkFilmExistence(int filmId) {
+        filmDao.getFilmById(filmId);
+    }
 }
