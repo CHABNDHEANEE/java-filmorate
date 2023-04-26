@@ -32,12 +32,12 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReviewById(@RequestParam Integer id) {
+    public void deleteReviewById(@PathVariable int id) {
         reviewService.deleteReview(id);
     }
 
     @GetMapping("/{id}")
-    public Review getReviewById(@RequestParam Integer id) {
+    public Review getReviewById(@PathVariable int id) {
         return reviewService.getReviewById(id);
     }
 }
