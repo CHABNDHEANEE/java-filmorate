@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.model.Review;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -58,6 +59,18 @@ public class ReviewDaoImpl implements ReviewDao {
             throwObjectExistenceException();
 
         return getReviewById(review.getReviewId());
+    }
+
+    @Override
+    public List<Review> getReviewList(int filmId, int count) {
+        String sql = "SELECT * FROM reviews WHERE film_id = ? LIMIT ?";
+
+        if (filmId == -1) {
+            sql = "SELECT * FROM reviews LIMIT ?";
+            return jdbcTemplate.query(sql, this::makeReview, count);
+        }
+
+        return jdbcTemplate.query(sql, this::makeReview, filmId, count);
     }
 
     @Override
