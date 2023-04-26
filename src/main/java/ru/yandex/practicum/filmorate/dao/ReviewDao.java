@@ -7,7 +7,7 @@ public interface ReviewDao {
 
     Review updateReview(Review review);
 
-    Review deleteReviewById(int id);
+    void deleteReviewById(int id);
 
     Review getReviewById(int id);
 }

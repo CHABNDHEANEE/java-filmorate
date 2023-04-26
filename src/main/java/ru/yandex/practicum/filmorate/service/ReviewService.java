@@ -18,8 +18,8 @@ public class ReviewService {
         return reviewDao.updateReview(review);
     }
 
-    public Review deleteReview(int id) {
-        return reviewDao.deleteReviewById(id);
+    public void deleteReview(int id) {
+        reviewDao.deleteReviewById(id);
     }
 
     public Review getReviewById(int id) {

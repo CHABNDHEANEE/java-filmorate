@@ -24,8 +24,8 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    public Review deleteReviewById(@RequestParam Integer id) {
-        return reviewService.deleteReview(id);
+    public void deleteReviewById(@RequestParam Integer id) {
+        reviewService.deleteReview(id);
     }
 
     @GetMapping("/{id}")
