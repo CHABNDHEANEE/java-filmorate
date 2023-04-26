@@ -35,4 +35,8 @@ public class FilmDbService {
         film.setMpa(ratingDao.getRatingById(film.getMpa().getId()));
         return filmDao.updateFilm(film);
     }
+
+    public void deleteFilm(int filmId) {
+        filmDao.deleteFilm(filmId);
+    }
 }

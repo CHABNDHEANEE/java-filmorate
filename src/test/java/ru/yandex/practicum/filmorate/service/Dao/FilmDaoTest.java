@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service.Dao;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -73,6 +74,16 @@ public class FilmDaoTest {
         assertThat(result.size(), is(2));
         checkFilm(result.get(0), film1);
         checkFilm(result.get(1), film2);
+    }
+
+    @Test
+    void shouldRemoveFilm1WhenUseMethodDelete() {
+        List<Film> result = filmService.getFilmsList(10);
+        Film film = filmService.addFilm(film4);
+        filmService.deleteFilm(film.getId());
+        List<Film> result2 = filmService.getFilmsList(10);
+
+        assertThat(result2.size(), is(result.size()));
     }
 
     private void checkFilm(Film result, Film expected) {

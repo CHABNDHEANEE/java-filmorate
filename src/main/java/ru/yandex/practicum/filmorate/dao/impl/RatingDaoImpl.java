@@ -24,7 +24,7 @@ public class RatingDaoImpl implements RatingDao {
     }
 
     @Override
-    public FilmRating getRatingById(int ratingId) {
+    public FilmRating   getRatingById(int ratingId) {
         String sql =
                 "SELECT * FROM film_rating WHERE rating_id = ?";
 

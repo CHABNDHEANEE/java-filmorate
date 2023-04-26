@@ -47,4 +47,8 @@ public class UserDbService {
     public void deleteFriend(int userId, int friendId) {
         userDao.deleteFriend(userId, friendId);
     }
+
+    public void deleteUser(int userId) {
+        userDao.delete(userId);
+    }
 }

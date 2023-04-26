@@ -12,4 +12,6 @@ public interface FilmDao {
     Film getFilmById(int filmId);
 
     List<Film> getFilmsList(int max);
+
+    void deleteFilm(int filmId);
 }

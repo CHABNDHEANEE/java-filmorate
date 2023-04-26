@@ -27,7 +27,7 @@ public class FilmDaoImpl implements FilmDao {
     @Override
     public Film addFilm(Film film) {
         String sql =
-                        "INSERT INTO films " +
+                "INSERT INTO films " +
                         "(film_title, film_description, film_release_date, film_duration, film_rating_id) " +
                         "VALUES (?, ?, ?, ?, ?)";
 
@@ -90,6 +90,14 @@ public class FilmDaoImpl implements FilmDao {
                 "SELECT * FROM films LIMIT ?";
 
         return jdbcTemplate.query(sql, this::makeFilm, max);
+    }
+
+    @Override
+    public void deleteFilm(int filmId) {
+        getFilmById(filmId);
+        String sqlQuery = "DELETE films " +
+                "WHERE film_id = ?";
+        jdbcTemplate.update(sqlQuery, filmId);
     }
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
