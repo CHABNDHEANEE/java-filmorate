@@ -137,7 +137,7 @@ public class FilmDaoImpl implements FilmDao {
         Integer result = jdbcTemplate
                 .queryForObject("SELECT count(USER_ID) FROM USERS WHERE USER_ID = ?", Integer.class, userId);
 
-        if (result == null ) {
+        if (result == null) {
             throw new ObjectExistenceException("User with id='" + userId + "' not found");
         }
 
