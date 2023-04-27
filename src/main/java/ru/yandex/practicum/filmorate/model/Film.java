@@ -31,4 +31,9 @@ public class Film {
     private int duration;
     @NotNull
     private FilmRating mpa;
+    private List<Director> directors;
+
+    public void removeDirector(){
+       directors.clear();
+    }
 }

@@ -40,4 +40,17 @@ public class FilmController {
 
         return filmService.getFilmsList(10);
     }
+
+    @GetMapping("/films/director/{directorId}")
+    public List<Film> getFilmWithDirectorSortByYear(@PathVariable("directorId") int directorId, @RequestParam ("sortBy")
+                                                    String value) {
+        if (value == "year") {
+            log.info("get Film With Director Sort By Year");
+            return filmService.getFilmWithDirectorSortByYear(directorId);
+        } else if (value == "likes") {
+            log.info("get Film With Director Sort By Likes");
+            return filmService.getFilmWithDirectorSortByYear(directorId);
+        } else
+            return null;
+    }
 }
