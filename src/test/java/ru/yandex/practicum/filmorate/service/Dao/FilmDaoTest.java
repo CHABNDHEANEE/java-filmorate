@@ -40,6 +40,21 @@ public class FilmDaoTest {
     private final Film film4 = new Film(4, "God Father4", List.of(genre), "Film about father4",
             LocalDate.now(), 240, mpa);
 
+    private final User user1 = User
+            .builder()
+            .name("Mike")
+            .login("mike")
+            .email("mike@mail.ru")
+            .birthday(LocalDate.now())
+            .build();
+
+    private final User user2 = User.builder()
+            .name("Vasya")
+            .login("mike")
+            .email("vs@mail.ru")
+            .birthday(LocalDate.now())
+            .build();
+
     @BeforeEach
     void beforeEach() {
         filmService.addFilm(film1);
@@ -82,20 +97,8 @@ public class FilmDaoTest {
 
     @Test
     public void commonFilms() {
-        userDbService.addUser(User
-                .builder().id(1)
-                .name("Mike")
-                .login("mike")
-                .email("mike@mail.ru")
-                .birthday(LocalDate.now())
-                .build());
-        userDbService.addUser(User
-                .builder().id(2)
-                .name("Vasya")
-                .login("mike")
-                .email("vs@mail.ru")
-                .birthday(LocalDate.now())
-                .build());
+        userDbService.addUser(user1);
+        userDbService.addUser(user2);
 
         likeService.like(film1.getId(), 1);
         likeService.like(film1.getId(), 2);
