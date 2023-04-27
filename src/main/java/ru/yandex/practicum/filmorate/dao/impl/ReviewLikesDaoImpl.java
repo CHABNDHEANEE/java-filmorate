@@ -2,11 +2,11 @@ package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.ReviewDao;
 import ru.yandex.practicum.filmorate.dao.ReviewLikesDao;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class ReviewLikesDaoImpl implements ReviewLikesDao {
     private final JdbcTemplate jdbcTemplate;

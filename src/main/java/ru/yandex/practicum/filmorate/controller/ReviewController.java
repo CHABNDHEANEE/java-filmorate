@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Review;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@Component
 @Validated
 @RequestMapping("/reviews")
 public class ReviewController {

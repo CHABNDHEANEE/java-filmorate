@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.ReviewDao;
 import ru.yandex.practicum.filmorate.dao.UserDao;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-@Component
+@Repository
 public class ReviewDaoImpl implements ReviewDao {
     private final JdbcTemplate jdbcTemplate;
     private final FilmDao filmDao;
