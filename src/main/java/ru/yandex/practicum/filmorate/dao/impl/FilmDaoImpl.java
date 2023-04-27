@@ -94,13 +94,9 @@ public class FilmDaoImpl implements FilmDao {
     }
 
     @Override
-    public List<Film> findCommonFilmsByUserIdAndFriendId(Integer userId, Integer friendId) {
-        Integer resultSearchByUserId = jdbcTemplate
-                .queryForObject("SELECT count(USER_ID) FROM USERS WHERE USER_ID = ?", Integer.class, userId);
-
-        if (resultSearchByUserId == null || resultSearchByUserId == 0) {
-            throw new ObjectExistenceException("User with id='" + userId + "' not found");
-        }
+    public List<Film> findCommonFilms(Integer userId, Integer friendId) {
+        checkExistUserById(userId);
+        checkExistUserById(friendId);
 
         Integer resultSearchByFriendId = jdbcTemplate
                 .queryForObject("SELECT count(USER_ID) FROM USERS WHERE USER_ID = ?", Integer.class, friendId);
@@ -109,21 +105,19 @@ public class FilmDaoImpl implements FilmDao {
             throw new ObjectExistenceException("User with id='" + friendId + "' not found");
         }
 
-        List<Film> films = jdbcTemplate.query(
+        return jdbcTemplate.query(
                 "SELECT * " +
                         "FROM FILMS f " +
                         "LEFT JOIN FILM_RATING mpa ON f.FILM_RATING_ID = mpa.RATING_ID " +
                         "WHERE f.FILM_ID IN " +
-                        "      (SELECT ul.film_id " +
-                        "       FROM USERS_LIKED_FILMS ul " +
-                        "                INNER JOIN USERS_LIKED_FILMS fl ON ul.film_id = fl.film_id " +
-                        "       WHERE ul.user_id = ? AND fl.user_id = ?) " +
+                        "(SELECT ul.film_id " +
+                        "FROM USERS_LIKED_FILMS ul " +
+                        "INNER JOIN USERS_LIKED_FILMS fl ON ul.film_id = fl.film_id " +
+                        "WHERE ul.user_id = ? AND fl.user_id = ?) " +
                         "ORDER BY FILM_RATING_ID DESC",
                 this::makeFilm,
                 userId, friendId
         );
-
-        return films;
     }
 
 
@@ -137,5 +131,15 @@ public class FilmDaoImpl implements FilmDao {
                 .duration(rs.getInt("film_duration"))
                 .mpa(ratingDao.getRatingById(rs.getInt("film_rating_id")))
                 .build();
+    }
+
+    private void checkExistUserById(Integer userId) {
+        Integer result = jdbcTemplate
+                .queryForObject("SELECT count(USER_ID) FROM USERS WHERE USER_ID = ?", Integer.class, userId);
+
+        if (result == null ) {
+            throw new ObjectExistenceException("User with id='" + userId + "' not found");
+        }
+
     }
 }

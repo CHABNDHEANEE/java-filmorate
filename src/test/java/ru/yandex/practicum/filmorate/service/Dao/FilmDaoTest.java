@@ -80,19 +80,8 @@ public class FilmDaoTest {
         checkFilm(result.get(1), film2);
     }
 
-    private void checkFilm(Film result, Film expected) {
-        assertThat(result.getId(), is(expected.getId()));
-        assertThat(result.getName(), is(expected.getName()));
-        assertThat(result.getMpa(), is(expected.getMpa()));
-        assertThat(result.getDescription(), is(expected.getDescription()));
-        assertThat(result.getGenres(), is(expected.getGenres()));
-        assertThat(result.getReleaseDate(), is(expected.getReleaseDate()));
-        assertThat(result.getDuration(), is(expected.getDuration()));
-    }
-
-
     @Test
-    void commonFilms() {
+    public void commonFilms() {
         userDbService.addUser(User
                 .builder().id(1)
                 .name("Mike")
@@ -113,10 +102,20 @@ public class FilmDaoTest {
 
         List<Film> expected = List.of(film1);
 
-        List<Film> result = filmService.getCommonFilmsBetweenUserAndFriend(1, 2);
+        List<Film> result = filmService.getCommonFilms(1, 2);
 
         assertThat(result.size(), is(expected.size()));
         assertThat(result.get(0), is(expected.get(0)));
         assertThat(result.get(0).getName(), is(film1.getName()));
+    }
+
+    private void checkFilm(Film result, Film expected) {
+        assertThat(result.getId(), is(expected.getId()));
+        assertThat(result.getName(), is(expected.getName()));
+        assertThat(result.getMpa(), is(expected.getMpa()));
+        assertThat(result.getDescription(), is(expected.getDescription()));
+        assertThat(result.getGenres(), is(expected.getGenres()));
+        assertThat(result.getReleaseDate(), is(expected.getReleaseDate()));
+        assertThat(result.getDuration(), is(expected.getDuration()));
     }
 }

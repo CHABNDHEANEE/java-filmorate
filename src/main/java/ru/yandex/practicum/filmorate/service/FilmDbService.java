@@ -38,8 +38,9 @@ public class FilmDbService {
         return filmDao.updateFilm(film);
     }
 
-    public List<Film> getCommonFilmsBetweenUserAndFriend(Integer userId, Integer friendId) {
+    public List<Film> getCommonFilms(Integer userId, Integer friendId) {
         log.info("Get common films between user id='{}' and friend id='{}'", userId, friendId);
-        return filmDao.findCommonFilmsByUserIdAndFriendId(userId, friendId);
+        return filmDao.findCommonFilms(userId, friendId);
     }
 }
+
