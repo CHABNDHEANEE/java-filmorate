@@ -37,10 +37,7 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public List<Film> findMostPopularFilms(Integer limit, Integer genreId, String year) {
-        if (limit == null) {
-            limit = 10;
-        }
+    public List<Film> findPopularFilms(Integer limit, Integer genreId, String year) {
 
         if (genreId == null && year == null) {
             String sql = "SELECT f.*, COUNT(l.user_id) " +
@@ -54,37 +51,34 @@ public class LikeDaoImpl implements LikeDao {
         }
 
         if (genreId != null && year != null) {
-            String sql =
-                    "SELECT f.* FROM FILMS f\n" +
-                            "LEFT JOIN FILM_GENRE fg on f.FILM_ID = fg.FILM_ID\n" +
-                            "LEFT OUTER JOIN users_liked_films ulf ON ulf.FILM_ID = f.FILM_ID\n" +
-                            "WHERE fg.GENRE_ID = ? AND YEAR(f.FILM_RELEASE_DATE) = ? " +
-                            "GROUP BY f.FILM_ID " +
-                            "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
-                            "LIMIT ? ";
+            String sql = "SELECT f.* FROM FILMS f\n" +
+                    "LEFT JOIN FILM_GENRE fg on f.FILM_ID = fg.FILM_ID\n" +
+                    "LEFT OUTER JOIN users_liked_films ulf ON ulf.FILM_ID = f.FILM_ID\n" +
+                    "WHERE fg.GENRE_ID = ? AND YEAR(f.FILM_RELEASE_DATE) = ? " +
+                    "GROUP BY f.FILM_ID " +
+                    "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
+                    "LIMIT ? ";
             return jdbcTemplate.query(sql, this::makeFilm, genreId, year, limit);
         }
 
         if (genreId == null) {
-            String sql =
-                    "SELECT f.* FROM FILMS f\n" +
-                            "LEFT JOIN FILM_GENRE fg on f.FILM_ID = fg.FILM_ID\n" +
-                            "LEFT OUTER JOIN users_liked_films ulf ON ulf.FILM_ID = f.FILM_ID\n" +
-                            "WHERE YEAR(f.FILM_RELEASE_DATE) = ? " +
-                            "GROUP BY f.FILM_ID " +
-                            "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
-                            "LIMIT ? ";
+            String sql = "SELECT f.* FROM FILMS f\n" +
+                    "LEFT JOIN FILM_GENRE fg on f.FILM_ID = fg.FILM_ID\n" +
+                    "LEFT OUTER JOIN users_liked_films ulf ON ulf.FILM_ID = f.FILM_ID\n" +
+                    "WHERE YEAR(f.FILM_RELEASE_DATE) = ? " +
+                    "GROUP BY f.FILM_ID " +
+                    "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
+                    "LIMIT ? ";
             return jdbcTemplate.query(sql, this::makeFilm, year, limit);
         }
 
-        String sql =
-                "SELECT f.* FROM FILMS f\n" +
-                        "LEFT JOIN FILM_GENRE fg on f.FILM_ID = fg.FILM_ID\n" +
-                        "LEFT OUTER JOIN users_liked_films ulf ON ulf.FILM_ID = f.FILM_ID\n" +
-                        "WHERE fg.GENRE_ID = ? " +
-                        "GROUP BY f.FILM_ID " +
-                        "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
-                        "LIMIT ? ";
+        String sql = "SELECT f.* FROM FILMS f\n" +
+                "LEFT JOIN FILM_GENRE fg on f.FILM_ID = fg.FILM_ID\n" +
+                "LEFT OUTER JOIN users_liked_films ulf ON ulf.FILM_ID = f.FILM_ID\n" +
+                "WHERE fg.GENRE_ID = ? " +
+                "GROUP BY f.FILM_ID " +
+                "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
+                "LIMIT ? ";
         return jdbcTemplate.query(sql, this::makeFilm, genreId, limit);
     }
 
