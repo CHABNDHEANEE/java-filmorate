@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.auxilary.IsAfter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 
 import javax.validation.constraints.*;
@@ -31,4 +32,5 @@ public class Film {
     private int duration;
     @NotNull
     private FilmRating mpa;
+    private Set<Director> directors;
 }

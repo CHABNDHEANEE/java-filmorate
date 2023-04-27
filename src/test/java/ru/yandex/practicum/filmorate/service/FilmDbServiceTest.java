@@ -14,6 +14,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,9 +35,9 @@ public class FilmDbServiceTest {
         genre = new FilmGenre(1);
         mpa = new FilmRating(1);
         film = new Film(1, "God Father", List.of(genre), "Film about father",
-                LocalDate.now(), 240, mpa);
+                LocalDate.now(), 240, mpa, Set.of());
         film2 = new Film(2, "God Father", List.of(genre), "Film about father",
-                LocalDate.now(), 240, mpa);
+                LocalDate.now(), 240, mpa, Set.of());
         user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     }
 
