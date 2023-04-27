@@ -28,8 +28,8 @@ public class LikeService {
         likeDao.unlike(userId, filmId);
     }
 
-    public List<Film> getMostPopularFilms(Integer filmsCount) {
-        return likeDao.getMostPopularFilms(filmsCount);
+    public List<Film> getMostPopularFilms(Integer limit, Integer genreId, String year) {
+        return likeDao.findMostPopularFilms(limit, genreId, year);
     }
 
     private void checkExistenceOfUserAndFilm(int filmId, int userId) {
