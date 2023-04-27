@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -101,6 +102,7 @@ public class FilmDaoImpl implements FilmDao {
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
                 .mpa(ratingDao.getRatingById(rs.getInt("film_rating_id")))
+                .directors(new HashSet<>())
                 .build();
     }
 }
