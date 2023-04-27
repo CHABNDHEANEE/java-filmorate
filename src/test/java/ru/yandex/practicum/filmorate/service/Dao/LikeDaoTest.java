@@ -1,13 +1,11 @@
 package ru.yandex.practicum.filmorate.service.Dao;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
@@ -29,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class LikeDaoTest {
-    private final JdbcTemplate jdbcTemplate;
     private final FilmDbService filmService;
     private final UserDbService userService;
     private final LikeService likeService;
@@ -46,11 +43,6 @@ public class LikeDaoTest {
             LocalDate.of(2000, 1, 1));
     private final User user2 = new User(2, "test@gmail.com", "testLogin", "Name",
             LocalDate.of(2000, 1, 1));
-
-    @AfterEach
-    public void clean() {
-        jdbcTemplate.update("DELETE FROM users_liked_films");
-    }
 
     @Test
     public void likeFilm_correctListFilms_threeLikesAdded() {
