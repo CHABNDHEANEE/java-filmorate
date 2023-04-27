@@ -53,7 +53,7 @@ public class LikeDaoTest {
         likeService.like(film3.getId(), user2.getId());
         likeService.like(film3.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(null, null, null);
+        List<Film> result = likeService.getPopularFilms(10, null, null);
 
         assertAll(
                 () -> assertThat(result.isEmpty(), is(false)),
@@ -71,7 +71,7 @@ public class LikeDaoTest {
         likeService.like(film3.getId(), user1.getId());
         likeService.unlike(film3.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(2, null, null);
+        List<Film> result = likeService.getPopularFilms(2, null, null);
 
         System.out.println(result);
 
@@ -91,7 +91,7 @@ public class LikeDaoTest {
         likeService.like(film2.getId(), user2.getId());
         likeService.like(film3.getId(), user2.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(2, null, null);
+        List<Film> result = likeService.getPopularFilms(2, null, null);
 
         assertAll(
                 () -> assertThat(result.isEmpty(), is(false)),
@@ -105,7 +105,7 @@ public class LikeDaoTest {
     @Test
     @DisplayName("findMostPopularFilms | empty list films | user likes no added")
     void findMostPopularFilms_emptyList_noAddedLikes() {
-        List<Film> result = likeService.getMostPopularFilms(null, null, null);
+        List<Film> result = likeService.getPopularFilms(10, null, null);
 
         assertThat(result.isEmpty(), is(true));
     }
@@ -117,7 +117,7 @@ public class LikeDaoTest {
 
         likeService.like(film1.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(null, null, null);
+        List<Film> result = likeService.getPopularFilms(10, null, null);
 
         assertThat(result.size(), is(3));
     }
@@ -129,7 +129,7 @@ public class LikeDaoTest {
 
         likeService.like(film1.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(2, null, "2022");
+        List<Film> result = likeService.getPopularFilms(2, null, "2022");
 
         assertThat(result.size(), is(2));
         assertThat(result.contains(film1), is(true));
@@ -143,7 +143,7 @@ public class LikeDaoTest {
 
         likeService.like(film1.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(2, 1, null);
+        List<Film> result = likeService.getPopularFilms(2, 1, null);
 
         assertThat(result.size(), is(2));
         assertThat(result.get(0), is(film1));
@@ -156,7 +156,7 @@ public class LikeDaoTest {
 
         likeService.like(film1.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(2, 2, "2020");
+        List<Film> result = likeService.getPopularFilms(2, 2, "2020");
 
         assertThat(result.size(), is(1));
         assertThat(result.get(0), is(film2));
@@ -169,7 +169,7 @@ public class LikeDaoTest {
 
         likeService.like(film1.getId(), user1.getId());
 
-        List<Film> result = likeService.getMostPopularFilms(10, 4, "2018");
+        List<Film> result = likeService.getPopularFilms(10, 4, "2018");
 
         assertThat(result.isEmpty(), is(true));
     }

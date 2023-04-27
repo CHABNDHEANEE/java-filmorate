@@ -9,5 +9,5 @@ public interface LikeDao {
 
     void unlike(int userId, int filmId);
 
-    List<Film> findMostPopularFilms(Integer limit, Integer genreId, String year);
+    List<Film> findPopularFilms(Integer limit, Integer genreId, String year);
 }
