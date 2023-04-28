@@ -65,6 +65,7 @@ public class LikeDaoImpl implements LikeDao {
                         "LEFT OUTER JOIN users_liked_films AS l " +
                         "ON l.film_id = f.film_id " +
                         "WHERE f.film_id IN()");
+
         sqlb.insert(sqlb.length()-1, filmsIdToString);
         return jdbcTemplate.query(sqlb.toString(), LikeDaoImpl.this::makeFilm);
     }
