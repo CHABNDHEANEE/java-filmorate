@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
@@ -62,10 +63,7 @@ public class FilmDaoImpl implements FilmDao {
     public Film getFilmById(int filmId) {
         String sql =
                 "SELECT * FROM films WHERE film_id = ?";
-        // Перед получением фильма обновляет его -> проверяет актуальные значения режиссера
-//        Film film = jdbcTemplate.queryForObject(sql, this::makeFilm, filmId);
-//        List<Director> filmdirectors = directorDao.addDirectorToFilm(film.getId(), film.getDirectors());
-//        film.setDirectors(filmdirectors);
+
         return jdbcTemplate.queryForObject(sql, this::makeFilm, filmId);
     }
 
@@ -88,9 +86,7 @@ public class FilmDaoImpl implements FilmDao {
         genreDao.deleteGenresForFilm(film.getId());
         List<FilmGenre> filmGenres = genreDao.addGenresToFilm(film.getId(), film.getGenres());
         film.setGenres(filmGenres);
-        // Попытка сделать директоров обновляемыми
-//        film.removeDirector();
-
+        directorDao.deleteDirectorForFilm(film.getId());
         List<Director> filmDirectors = directorDao.addDirectorToFilm(film.getId(), film.getDirectors());
         film.setDirectors(filmDirectors);
 
@@ -104,10 +100,20 @@ public class FilmDaoImpl implements FilmDao {
         return jdbcTemplate.query(sql, this::makeFilm, max);
     }
 
+    @Override
     public List<Film> getFilmWithDirectorSortByYear(int directorId) {
         String sql =
-                "SELECT * FROM films WHERE film_id IN (SELECT film_id FROM film_director" +
+                "SELECT * FROM films WHERE film_id IN (SELECT film_id FROM film_director " +
                         "WHERE id = ?) ORDER BY film_release_date";
+
+        return jdbcTemplate.query(sql, this::makeFilm, directorId);
+    }
+
+    @Override
+    public List<Film> getFilmWithDirectorSortByLikes(int directorId) {
+        String sql =
+                "SELECT * FROM films WHERE film_id IN (SELECT film_id FROM film_director " +
+                        "WHERE id = ?) ORDER BY film_rating_id DESC";
 
         return jdbcTemplate.query(sql, this::makeFilm, directorId);
     }

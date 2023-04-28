@@ -31,6 +31,6 @@ public class DirectorDbService {
     };
 
     public void deleteDirector(int directorId){
-        directorDao.getDirectorById(directorId);
+        directorDao.deleteDirector(directorId);
     };
 }

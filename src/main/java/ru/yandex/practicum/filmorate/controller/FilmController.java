@@ -44,12 +44,12 @@ public class FilmController {
     @GetMapping("/films/director/{directorId}")
     public List<Film> getFilmWithDirectorSortByYear(@PathVariable("directorId") int directorId, @RequestParam ("sortBy")
                                                     String value) {
-        if (value == "year") {
+        if (value.equals("year")) {
             log.info("get Film With Director Sort By Year");
             return filmService.getFilmWithDirectorSortByYear(directorId);
-        } else if (value == "likes") {
+        } else if (value.equals("likes")) {
             log.info("get Film With Director Sort By Likes");
-            return filmService.getFilmWithDirectorSortByYear(directorId);
+            return filmService.getFilmWithDirectorSortByLikes(directorId);
         } else
             return null;
     }

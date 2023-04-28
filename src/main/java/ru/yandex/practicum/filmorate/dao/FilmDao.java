@@ -14,4 +14,6 @@ public interface FilmDao {
     List<Film> getFilmsList(int max);
 
     List<Film> getFilmWithDirectorSortByYear(int directorId);
+
+    public List<Film> getFilmWithDirectorSortByLikes(int directorId);
 }

@@ -39,4 +39,8 @@ public class FilmDbService {
     public List<Film> getFilmWithDirectorSortByYear(int directorId){
         return filmDao.getFilmWithDirectorSortByYear(directorId);
     }
+
+    public List<Film> getFilmWithDirectorSortByLikes(int directorId){
+        return filmDao.getFilmWithDirectorSortByLikes(directorId);
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Director;
 
 import java.sql.PreparedStatement;
@@ -41,10 +42,14 @@ public class DirectorDaoImpl implements DirectorDao {
 
     @Override
     public Director getDirectorById(int directorId) {
-        String sql =
-                "SELECT * FROM director WHERE id = ?";
+        try {
+            String sql =
+                    "SELECT * FROM director WHERE id = ?";
 
-        return jdbcTemplate.queryForObject(sql, this::makeDirector, directorId);
+            return jdbcTemplate.queryForObject(sql, this::makeDirector, directorId);
+        } catch (NotFoundException e){
+            return null;
+        }
     }
 
     @Override
@@ -77,38 +82,6 @@ public class DirectorDaoImpl implements DirectorDao {
     }
 
     @Override
-    public void deleteDirector(int directorId) {
-        String request = "DELETE FROM director WHERE id=?";
-        List<Director> directorsList = getDirectorsList();
-        Director searchingDirector = null;
-        for (Director director : directorsList) {
-            if (director.getId() == directorId)
-                searchingDirector = director;
-        }
-        jdbcTemplate.update(request,
-                searchingDirector.getId());
-    }
-
-    @Override
-    public void deleteDirectorForFilm(int filmId) {
-        String sql =
-                "DELETE FROM film_director " +
-                        "WHERE film_id = ?";
-
-        jdbcTemplate.update(sql, filmId);
-    }
-
-
-    public List<Director> getFilmWithDirectorSortByYear(int directorId) {
-        String sql =
-                "SELECT fd.*, d.name FROM film_director AS fd " +
-                        "JOIN director AS d ON d.id = fd.id " +
-                        "WHERE fd.film_id = ?";
-
-        return jdbcTemplate.query(sql, this::makeDirector, directorId);
-    }
-
-    @Override
     public List<Director> addDirectorToFilm(int filmId, List<Director> directors) {
         String sql =
                 "MERGE INTO film_director " +
@@ -124,6 +97,30 @@ public class DirectorDaoImpl implements DirectorDao {
             jdbcTemplate.update(sql, filmId, director.getId());
         }
         return getDirectorListForFilm(filmId);
+    }
+
+    @Override
+    public void deleteDirector(int directorId) {
+        String request = "DELETE FROM director WHERE id = ?";
+        List<Director> directorsList = getDirectorsList();
+        Director searchingDirector = null;
+        for (Director director : directorsList) {
+            if (director.getId() == directorId)
+                searchingDirector = director;
+        }
+        listIdDirector.remove(directorId - 1);
+        jdbcTemplate.update(request,
+                searchingDirector.getId());
+        deleteDirectorForFilm(directorId);
+    }
+
+    @Override
+    public void deleteDirectorForFilm(int directorId) {
+        String sql =
+                "DELETE FROM film_director " +
+                        "WHERE film_id = ?";
+
+        jdbcTemplate.update(sql, directorId);
     }
 
     private Director makeDirector(ResultSet rs, int rowNum) throws SQLException {
