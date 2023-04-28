@@ -118,4 +118,38 @@ public class UserDaoTest {
         userStorage.addFriend(3, 1);
         userStorage.addFriend(3, 2);
     }
+
+    @Test
+    void shouldRemoveFilm1WhenUseMethodDelete() {
+        List<User> result = userStorage.getUsersList(10);
+        userStorage.addUser(user1);
+        userStorage.deleteUser(user1.getId());
+        List<User> result2 = userStorage.getUsersList(10);
+
+        assertThat(result2.size(), is(result.size()));
+    }
+
+    @Test
+    void shouldRemoveFilm1WhenUserHasFriends() {
+        userStorage.addUser(user1);
+        List<User> result = userStorage.getUsersList(10);
+        userStorage.addUser(user2);
+        userStorage.addFriend(user1.getId(), user2.getId());
+        userStorage.deleteUser(user1.getId());
+        List<User> result2 = userStorage.getUsersList(10);
+
+        assertThat(result2.size(), is(result.size()));
+    }
+
+//    @Test
+//    void shouldRemoveFilm1WhenFilmContainsLikes() {
+//        List<Film> result = filmService.getFilmsList(10);
+//        Film film = filmService.addFilm(film4);
+//        User user = userDbService.addUser(user1);
+//        likeService.like(film.getId(), user.getId());
+//        filmService.deleteFilm(film.getId());
+//        List<Film> result2 = filmService.getFilmsList(10);
+//
+//        assertThat(result2.size(), is(result.size()));
+//    }
 }

@@ -71,7 +71,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void delete(int userId) {
         getUserById(userId);
-        String sqlQuery = "DELETE users WHERE user_id = ?";
+        String sqlQuery = "DELETE FROM users WHERE user_id = ?";
         jdbcTemplate.update(sqlQuery, userId);
     }
 

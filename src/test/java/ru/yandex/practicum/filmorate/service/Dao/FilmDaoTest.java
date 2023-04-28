@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service.Dao;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -11,7 +10,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
+import ru.yandex.practicum.filmorate.service.LikeService;
+import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,8 +27,14 @@ import static org.hamcrest.CoreMatchers.is;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class FilmDaoTest {
     private final FilmDbService filmService;
+
+    private final LikeService likeService;
+
+    private final UserDbService userDbService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
+
+    private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
             LocalDate.now(), 240, mpa);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
@@ -80,6 +88,18 @@ public class FilmDaoTest {
     void shouldRemoveFilm1WhenUseMethodDelete() {
         List<Film> result = filmService.getFilmsList(10);
         Film film = filmService.addFilm(film4);
+        filmService.deleteFilm(film.getId());
+        List<Film> result2 = filmService.getFilmsList(10);
+
+        assertThat(result2.size(), is(result.size()));
+    }
+
+    @Test
+    void shouldRemoveFilm1WhenFilmContainsLikes() {
+        List<Film> result = filmService.getFilmsList(10);
+        Film film = filmService.addFilm(film4);
+        User user = userDbService.addUser(user1);
+        likeService.like(film.getId(),user.getId());
         filmService.deleteFilm(film.getId());
         List<Film> result2 = filmService.getFilmsList(10);
 
