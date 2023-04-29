@@ -33,7 +33,7 @@ public class Film {
     private FilmRating mpa;
     private List<Director> directors;
 
-    public void removeDirector(){
+    public void removeDirector() {
        directors.clear();
     }
 }
