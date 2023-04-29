@@ -14,4 +14,6 @@ public interface FilmDao {
     List<Film> getFilmsList(int max);
 
     void deleteFilm(int filmId);
+
+    List<Film> findCommonFilms(Integer userId, Integer friendId);
 }

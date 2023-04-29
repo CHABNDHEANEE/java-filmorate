@@ -35,6 +35,8 @@ public class FilmDaoTest {
     private final FilmRating mpa = new FilmRating(1);
 
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
+    private final LikeService likeService;
+    private final UserDbService userDbService;
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
             LocalDate.now(), 240, mpa);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
@@ -43,6 +45,21 @@ public class FilmDaoTest {
             LocalDate.now(), 240, mpa);
     private final Film film4 = new Film(4, "God Father4", List.of(genre), "Film about father4",
             LocalDate.now(), 240, mpa);
+
+    private final User user1 = User
+            .builder()
+            .name("Mike")
+            .login("mike")
+            .email("mike@mail.ru")
+            .birthday(LocalDate.now())
+            .build();
+
+    private final User user2 = User.builder()
+            .name("Vasya")
+            .login("mike")
+            .email("vs@mail.ru")
+            .birthday(LocalDate.now())
+            .build();
 
     @BeforeEach
     void beforeEach() {
@@ -104,6 +121,21 @@ public class FilmDaoTest {
         List<Film> result2 = filmService.getFilmsList(10);
 
         assertThat(result2.size(), is(result.size()));
+        
+    public void commonFilms() {
+        userDbService.addUser(user1);
+        userDbService.addUser(user2);
+
+        likeService.like(film1.getId(), 1);
+        likeService.like(film1.getId(), 2);
+
+        List<Film> expected = List.of(film1);
+
+        List<Film> result = filmService.getCommonFilms(1, 2);
+
+        assertThat(result.size(), is(expected.size()));
+        assertThat(result.get(0), is(expected.get(0)));
+        assertThat(result.get(0).getName(), is(film1.getName()));
     }
 
     private void checkFilm(Film result, Film expected) {

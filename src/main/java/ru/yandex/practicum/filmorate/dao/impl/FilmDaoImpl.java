@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
+import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 
@@ -100,6 +101,26 @@ public class FilmDaoImpl implements FilmDao {
         jdbcTemplate.update(sqlQuery, filmId);
     }
 
+    public List<Film> findCommonFilms(Integer userId, Integer friendId) {
+        checkExistUserById(userId);
+        checkExistUserById(friendId);
+
+        return jdbcTemplate.query(
+                "SELECT * " +
+                        "FROM FILMS f " +
+                        "LEFT JOIN FILM_RATING mpa ON f.FILM_RATING_ID = mpa.RATING_ID " +
+                        "WHERE f.FILM_ID IN " +
+                        "(SELECT ul.film_id " +
+                        "FROM USERS_LIKED_FILMS ul " +
+                        "INNER JOIN USERS_LIKED_FILMS fl ON ul.film_id = fl.film_id " +
+                        "WHERE ul.user_id = ? AND fl.user_id = ?) " +
+                        "ORDER BY FILM_RATING_ID DESC",
+                this::makeFilm,
+                userId, friendId
+        );
+    }
+
+
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
         return Film.builder()
                 .id(rs.getInt("film_id"))
@@ -110,5 +131,15 @@ public class FilmDaoImpl implements FilmDao {
                 .duration(rs.getInt("film_duration"))
                 .mpa(ratingDao.getRatingById(rs.getInt("film_rating_id")))
                 .build();
+    }
+
+    private void checkExistUserById(Integer userId) {
+        Integer result = jdbcTemplate
+                .queryForObject("SELECT count(USER_ID) FROM USERS WHERE USER_ID = ?", Integer.class, userId);
+
+        if (result == null || result == 0) {
+            throw new ObjectExistenceException("User with id='" + userId + "' not found");
+        }
+
     }
 }
