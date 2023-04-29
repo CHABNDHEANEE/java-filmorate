@@ -43,7 +43,7 @@ create table IF NOT EXISTS FRIENDS
     FRIEND_ID            INTEGER not null,
     FRIENDSHIP_STATUS_ID INTEGER not null,
     constraint "FRIENDS_FRIENDSHIP_STATUS_STATUS_ID_fk"
-        foreign key (FRIENDSHIP_STATUS_ID) references FRIENDSHIP_STATUS,
+        foreign key (FRIENDSHIP_STATUS_ID) references FRIENDSHIP_STATUS ON DELETE CASCADE,
     constraint "FRIENDS_USERS_USER_ID_fk"
         foreign key (USER_ID) references USERS ON DELETE CASCADE,
     constraint "FRIENDS_USERS_USER_ID_fk2"

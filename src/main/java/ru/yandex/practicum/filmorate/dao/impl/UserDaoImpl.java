@@ -104,6 +104,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getFriends(int userId) {
+        getUserById(userId);
         String sql =
                         "SELECT u.* " +
                         "FROM friends AS f " +
