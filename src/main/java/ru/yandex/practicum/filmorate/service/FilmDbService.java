@@ -41,6 +41,7 @@ public class FilmDbService {
     public void deleteFilm(int filmId) {
         filmDao.deleteFilm(filmId);
     }
+
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
         log.info("Get common films between user id='{}' and friend id='{}'", userId, friendId);
         return filmDao.findCommonFilms(userId, friendId);
