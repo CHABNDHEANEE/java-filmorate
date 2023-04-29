@@ -38,11 +38,11 @@ public class FilmDbService {
         return filmDao.updateFilm(film);
     }
 
-    public List<Film> getFilmWithDirectorSortByYear(int directorId){
+    public List<Film> getFilmWithDirectorSortByYear(int directorId) {
         return filmDao.getFilmWithDirectorSortByYear(directorId);
     }
 
-    public List<Film> getFilmWithDirectorSortByLikes(int directorId){
+    public List<Film> getFilmWithDirectorSortByLikes(int directorId) {
         return filmDao.getFilmWithDirectorSortByLikes(directorId);
     }
 
