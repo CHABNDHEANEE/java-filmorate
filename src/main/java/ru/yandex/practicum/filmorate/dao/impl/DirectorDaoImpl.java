@@ -109,9 +109,9 @@ public class DirectorDaoImpl implements DirectorDao {
                 searchingDirector = director;
         }
         listIdDirector.remove(directorId - 1);
+        deleteDirectorForFilm(directorId);
         jdbcTemplate.update(request,
                 searchingDirector.getId());
-        deleteDirectorForFilm(directorId);
     }
 
     @Override
