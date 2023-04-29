@@ -101,6 +101,7 @@ public class FilmDaoImpl implements FilmDao {
         jdbcTemplate.update(sqlQuery, filmId);
     }
 
+    @Override
     public List<Film> findCommonFilms(Integer userId, Integer friendId) {
         checkExistUserById(userId);
         checkExistUserById(friendId);

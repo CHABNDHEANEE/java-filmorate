@@ -34,9 +34,6 @@ public class FilmDaoTest {
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
 
-    private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
-    private final LikeService likeService;
-    private final UserDbService userDbService;
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
             LocalDate.now(), 240, mpa);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
@@ -116,12 +113,14 @@ public class FilmDaoTest {
         List<Film> result = filmService.getFilmsList(10);
         Film film = filmService.addFilm(film4);
         User user = userDbService.addUser(user1);
-        likeService.like(film.getId(),user.getId());
+        likeService.like(film.getId(), user.getId());
         filmService.deleteFilm(film.getId());
         List<Film> result2 = filmService.getFilmsList(10);
 
         assertThat(result2.size(), is(result.size()));
-        
+    }
+
+    @Test
     public void commonFilms() {
         userDbService.addUser(user1);
         userDbService.addUser(user2);
