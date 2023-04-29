@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -160,6 +159,5 @@ public class FilmDaoImpl implements FilmDao {
         if (result == null || result == 0) {
             throw new ObjectExistenceException("User with id='" + userId + "' not found");
         }
-
     }
 }

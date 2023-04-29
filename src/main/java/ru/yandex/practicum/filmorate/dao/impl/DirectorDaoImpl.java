@@ -6,7 +6,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.DirectorDao;
-import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Director;
 
@@ -20,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DirectorDaoImpl implements DirectorDao {
     final JdbcTemplate jdbcTemplate;
-    //private final FilmDao filmDao;
     private final ArrayList<Integer> listIdDirector = new ArrayList<>();
 
     @Override
@@ -47,7 +45,7 @@ public class DirectorDaoImpl implements DirectorDao {
                     "SELECT * FROM director WHERE id = ?";
 
             return jdbcTemplate.queryForObject(sql, this::makeDirector, directorId);
-        } catch (NotFoundException e){
+        } catch (NotFoundException e) {
             return null;
         }
     }
