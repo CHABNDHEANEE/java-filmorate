@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
 
@@ -55,7 +54,7 @@ public class FilmController {
         if (value.equals("year")) {
             log.info("get Film With Director Sort By Year");
             List<Film> filmYear = filmService.getFilmWithDirectorSortByYear(directorId);
-            for (Film filmY : filmYear){
+            for (Film filmY : filmYear) {
                 if (filmY.getDirectors().size() == 0)
                     throw new IncorrectResultSizeDataAccessException("Фильмы отсутствуют", 0);
                 else
@@ -64,7 +63,7 @@ public class FilmController {
         } else if (value.equals("likes")) {
             log.info("get Film With Director Sort By Likes");
             List<Film> filmLikes = filmService.getFilmWithDirectorSortByLikes(directorId);
-            for (Film filmY : filmLikes){
+            for (Film filmY : filmLikes) {
                 if (filmY.getDirectors().size() == 0)
                     throw new IncorrectResultSizeDataAccessException("Фильмы отсутствуют", 0);
                 else
