@@ -33,6 +33,16 @@ public class Film {
     private FilmRating mpa;
     private List<Director> directors;
 
+    public Film(int id, String name, List<FilmGenre> genres, String description, LocalDate releaseDate, int duration, FilmRating mpa) {
+        this.id = id;
+        this.name = name;
+        this.genres = genres;
+        this.description = description;
+        this.releaseDate = releaseDate;
+        this.duration = duration;
+        this.mpa = mpa;
+    }
+
     public void removeDirector() {
        directors.clear();
     }
