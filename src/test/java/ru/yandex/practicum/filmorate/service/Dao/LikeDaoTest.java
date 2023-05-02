@@ -10,13 +10,11 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
 import ru.yandex.practicum.filmorate.service.LikeService;
 import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,16 +27,16 @@ import static org.hamcrest.CoreMatchers.is;
 public class LikeDaoTest {
     private final FilmDbService filmService;
     private final UserDbService userService;
+
     private final LikeService likeService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
-    private final List<Director> dir = new ArrayList<>();
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa, dir);
+            LocalDate.now(), 240, mpa);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
-            LocalDate.now(), 240, mpa, dir);
+            LocalDate.now(), 240, mpa);
     private final Film film3 = new Film(3, "God Father3", List.of(genre), "Film about father3",
-            LocalDate.now(), 240, mpa, dir);
+            LocalDate.now(), 240, mpa);
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final User user2 = new User(2, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
 
