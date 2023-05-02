@@ -46,7 +46,7 @@ public class DirectorDaoImpl implements DirectorDao {
 
             return jdbcTemplate.queryForObject(sql, this::makeDirector, directorId);
         } catch (NotFoundException e) {
-            return null;
+            throw new NotFoundException("id отсутствует");
         }
     }
 
