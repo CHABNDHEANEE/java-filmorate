@@ -8,6 +8,4 @@ public interface ReviewLikesDao {
     void deleteLike(int reviewId, int userId);
 
     void deleteDislike(int reviewId, int userId);
-
-//    int getUsefulnessOfReview(int reviewId);
 }
