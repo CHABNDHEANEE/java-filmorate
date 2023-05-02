@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -50,7 +51,22 @@ public class LikeDaoImpl implements LikeDao {
                         "ORDER BY COUNT(l.user_id) DESC " +
                         "LIMIT ?";
 
-        return jdbcTemplate.query(sql, this::makeFilm, filmsCount);
+        return jdbcTemplate.query(sql, LikeDaoImpl.this::makeFilm, filmsCount);
+    }
+
+    @Override
+    public List<Film> getMostPopularFilms(List<Integer> filmIds) {
+        String filmsIdToString = filmIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(",", "", ""));
+        StringBuilder sqlb = new StringBuilder(
+                "SELECT DISTINCT f.* " +
+                        "FROM films AS f " +
+                        "LEFT OUTER JOIN users_liked_films AS l " +
+                        "ON l.film_id = f.film_id " +
+                        "WHERE f.film_id IN()");
+        sqlb.insert(sqlb.length() - 1, filmsIdToString);
+        return jdbcTemplate.query(sqlb.toString(), LikeDaoImpl.this::makeFilm);
     }
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
