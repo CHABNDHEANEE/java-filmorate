@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.LikeDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-@Component
+@Repository
 public class LikeDaoImpl implements LikeDao {
     private final JdbcTemplate jdbcTemplate;
     private final GenreDao genreDao;
