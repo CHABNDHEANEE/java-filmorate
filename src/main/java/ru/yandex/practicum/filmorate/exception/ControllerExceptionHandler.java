@@ -43,5 +43,4 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     public Map<String, String> handleRuntimeError(final Exception e) {
         return Map.of("Server error!", e.getMessage());
     }
-
 }
