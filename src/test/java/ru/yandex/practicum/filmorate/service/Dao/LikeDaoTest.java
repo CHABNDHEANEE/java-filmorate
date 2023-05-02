@@ -77,6 +77,4 @@ public class LikeDaoTest {
         assertThat(result.get(0), is(film3));
         assertThat(result.get(1), is(film1));
     }
-
-
 }
