@@ -103,3 +103,17 @@ create table IF NOT EXISTS REVIEW_LIKES
         foreign key (USER_ID) references USERS
             on delete cascade
 );
+create table IF NOT EXISTS DIRECTOR
+(
+    ID           INTEGER               auto_increment,
+    NAME         CHARACTER VARYING(50) not null,
+    constraint DIRECTOR_PK
+            primary key (ID)
+);
+create table IF NOT EXISTS FILM_DIRECTOR
+(
+    FILM_ID  INTEGER not null,
+    ID       INTEGER not null,
+    constraint "FILM_DIRECTOR_FILMS_FILM_ID_fk"
+        foreign key (FILM_ID) references FILMS
+);

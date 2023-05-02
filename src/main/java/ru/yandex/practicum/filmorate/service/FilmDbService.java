@@ -38,6 +38,14 @@ public class FilmDbService {
         return filmDao.updateFilm(film);
     }
 
+    public List<Film> getFilmWithDirectorSortByYear(int directorId) {
+        return filmDao.getFilmWithDirectorSortByYear(directorId);
+    }
+
+    public List<Film> getFilmWithDirectorSortByLikes(int directorId) {
+        return filmDao.getFilmWithDirectorSortByLikes(directorId);
+    }
+
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
         log.info("Get common films between user id='{}' and friend id='{}'", userId, friendId);
         return filmDao.findCommonFilms(userId, friendId);

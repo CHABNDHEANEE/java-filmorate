@@ -32,13 +32,13 @@ public class FilmDaoTest {
     private final LikeService likeService;
     private final UserDbService userDbService;
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film3 = new Film(3, "God Father3", List.of(genre), "Film about father3",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film4 = new Film(4, "God Father4", List.of(genre), "Film about father4",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
 
     private final User user1 = User
             .builder()
