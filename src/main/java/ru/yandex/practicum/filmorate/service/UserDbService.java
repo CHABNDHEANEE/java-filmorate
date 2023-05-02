@@ -17,7 +17,7 @@ import static ru.yandex.practicum.filmorate.model.Operation.REMOVE;
 @Qualifier
 public class UserDbService {
     private final UserDao userDao;
-    private FeedDao feedDao;
+    private final FeedDao feedDao;
 
     public UserDbService(UserDao userDao, FeedDao feedDao) {
         this.userDao = userDao;
@@ -29,12 +29,15 @@ public class UserDbService {
     }
 
     public User updateUser(User user) {
+        checkExistenceOfUser(user.getId());
         return userDao.updateUser(user);
     }
 
     public void addFriend(int userId, int friendId) {
-        feedDao.addFeed(friendId, userId, Instant.now().toEpochMilli(), FRIEND, ADD);
+        checkExistenceOfUser(userId);
+        checkExistenceOfUser(friendId);
         userDao.addFriend(userId, friendId);
+        feedDao.addFeed(friendId, userId, Instant.now().toEpochMilli(), FRIEND, ADD);
     }
 
     public User getUserById(int userId) {
@@ -54,7 +57,13 @@ public class UserDbService {
     }
 
     public void deleteFriend(int userId, int friendId) {
-        feedDao.addFeed(friendId, userId, Instant.now().toEpochMilli(), FRIEND, REMOVE);
+        checkExistenceOfUser(userId);
+        checkExistenceOfUser(friendId);
         userDao.deleteFriend(userId, friendId);
+        feedDao.addFeed(friendId, userId, Instant.now().toEpochMilli(), FRIEND, REMOVE);
+    }
+
+    private void checkExistenceOfUser(int userId) {
+        userDao.getUserById(userId);
     }
 }

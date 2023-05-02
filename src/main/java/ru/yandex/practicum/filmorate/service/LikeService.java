@@ -25,14 +25,14 @@ public class LikeService {
 
     public void like(int filmId, int userId) {
         checkExistenceOfUserAndFilm(filmId, userId);
-        feedDao.addFeed(filmId, userId, Instant.now().toEpochMilli(), LIKE, ADD);
         likeDao.like(userId, filmId);
+        feedDao.addFeed(filmId, userId, Instant.now().toEpochMilli(), LIKE, ADD);
     }
 
     public void unlike(int filmId, int userId) {
         checkExistenceOfUserAndFilm(filmId, userId);
-        feedDao.addFeed(filmId, userId, Instant.now().toEpochMilli(), LIKE, REMOVE);
         likeDao.unlike(userId, filmId);
+        feedDao.addFeed(filmId, userId, Instant.now().toEpochMilli(), LIKE, REMOVE);
     }
 
     public List<Film> getMostPopularFilms(Integer filmsCount) {

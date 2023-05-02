@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.model.Operation;
 import java.util.List;
 
 public interface FeedDao {
-    void addFeed(Integer userId, Integer entityId, long timeStamp, EventType eventType, Operation operation);
+    void addFeed(int userId, int entityId, long timeStamp, EventType eventType, Operation operation);
 
     List<Feed> getFeed(int id);
 }

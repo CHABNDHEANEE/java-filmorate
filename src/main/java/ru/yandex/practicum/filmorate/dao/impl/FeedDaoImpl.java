@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.FeedDao;
@@ -11,9 +13,11 @@ import ru.yandex.practicum.filmorate.model.EventType;
 import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.Operation;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -22,11 +26,34 @@ public class FeedDaoImpl implements FeedDao {
     final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void addFeed(Integer entityId, Integer userId, long timeStamp, EventType eventType, Operation operation) {
+    public void addFeed(int entityId, int userId, long timeStamp, EventType eventType, Operation operation) {
         validateUser(userId);
+
         String sql = "INSERT INTO events (entity_id, user_Id, event_time, event_type, event_operation) " +
                 "values (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, userId, entityId, timeStamp, eventType.toString(), operation.toString());
+
+        Feed event = Feed.builder()
+                .eventType(eventType)
+                .userId(userId)
+                .timestamp(timeStamp)
+                .entityId(entityId)
+                .operation(operation)
+                .build();
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sql, new String[]{"event_id"});
+            stmt.setInt(1, entityId);
+            stmt.setInt(2, userId);
+            stmt.setLong(3, timeStamp);
+            stmt.setString(4, eventType.toString());
+            stmt.setString(5, operation.toString());
+            return stmt;
+        }, keyHolder);
+
+        event.setEventId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+        //jdbcTemplate.update(sql, entityId, userId, timeStamp, eventType.toString(), operation.toString());
     }
 
     @Override
@@ -38,6 +65,7 @@ public class FeedDaoImpl implements FeedDao {
 
     Feed makeFeed(ResultSet rs, int rowNum) throws SQLException {
         return Feed.builder()
+                .eventId(rs.getInt("event_id"))
                 .entityId(rs.getInt("entity_id"))
                 .userId(rs.getInt("user_id"))
                 .timestamp(rs.getLong("event_time"))
@@ -45,14 +73,13 @@ public class FeedDaoImpl implements FeedDao {
                 .operation(Operation.valueOf(rs.getString("event_operation")))
                 .build();
     }
-    private void validateUser(int userId) {
-        String sql = "SELECT * FROM USERS WHERE USER_ID = ?";
-        SqlRowSet userRows = jdbcTemplate.queryForRowSet(sql, userId);
 
+    private void validateUser(int userId) {
+        String userCheck =
+                "SELECT * FROM users WHERE user_id = ?";
+        SqlRowSet userRows = jdbcTemplate.queryForRowSet(userCheck, userId);
         if (!userRows.next()) {
-            log.warn("User id {} not found", userId);
-            throw new ObjectExistenceException("User id " + userId + " not found");
+            throw new ObjectExistenceException("User " + userId + " Not Found");
         }
     }
-
 }
