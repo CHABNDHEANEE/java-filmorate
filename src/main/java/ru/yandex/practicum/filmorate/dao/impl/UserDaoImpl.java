@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -14,8 +14,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
     final JdbcTemplate jdbcTemplate;
@@ -44,7 +45,7 @@ public class UserDaoImpl implements UserDao {
             return stmt;
         }, keyHolder);
 
-        return getUserById((int) keyHolder.getKey().longValue());
+        return getUserById((int) Objects.requireNonNull(keyHolder.getKey()).longValue());
     }
 
     @Override

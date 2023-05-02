@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
@@ -17,8 +17,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class FilmDaoImpl implements FilmDao {
     final JdbcTemplate jdbcTemplate;
@@ -46,7 +47,7 @@ public class FilmDaoImpl implements FilmDao {
             return stmt;
         }, keyHolder);
 
-        int id = (int) keyHolder.getKey().longValue();
+        int id = (int) Objects.requireNonNull(keyHolder.getKey()).longValue();
 
         List<FilmGenre> filmGenres = genreDao.addGenresToFilm(id, film.getGenres());
         film.setGenres(filmGenres);

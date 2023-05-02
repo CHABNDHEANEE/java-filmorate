@@ -12,22 +12,24 @@ import ru.yandex.practicum.filmorate.model.FilmRating;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
 import ru.yandex.practicum.filmorate.service.LikeService;
+import ru.yandex.practicum.filmorate.service.RecommendationService;
 import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class LikeDaoTest {
+public class RecommendationDaoTest {
+
     private final FilmDbService filmService;
     private final UserDbService userService;
 
+    private final RecommendationService recommendationService;
     private final LikeService likeService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
@@ -39,44 +41,62 @@ public class LikeDaoTest {
             LocalDate.now(), 240, mpa);
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final User user2 = new User(2, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
+    private final User user3 = new User(3, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
 
     @Test
-    public void testLikeFilm() {
+    public void shouldFilms2And3WhenUseMethodGetRecommendation() {
         filmService.addFilm(film1);
         filmService.addFilm(film2);
         filmService.addFilm(film3);
+
         userService.addUser(user1);
         userService.addUser(user2);
+        userService.addUser(user3);
 
         likeService.like(film1.getId(), user1.getId());
 
         likeService.like(film3.getId(), user2.getId());
-        likeService.like(film3.getId(), user1.getId());
+        likeService.like(film2.getId(), user2.getId());
+        likeService.like(film2.getId(), user3.getId());
+        likeService.like(film1.getId(), user2.getId());
 
+        List<Film> recommendation = recommendationService.getRecommendation(user1.getId());
+
+        assertEquals(recommendation.size(), 2);
+        assertEquals(recommendation.get(0).getId(), 2);
+        assertEquals(recommendation.get(1).getId(), 3);
     }
 
     @Test
-    public void testUnlikeFilm() {
-        testLikeFilm();
+    public void shouldEmptyFilmListWhenNoFilmRatings() {
+        filmService.addFilm(film1);
+        filmService.addFilm(film2);
+        filmService.addFilm(film3);
 
-        likeService.unlike(film3.getId(), user2.getId());
-        likeService.unlike(film3.getId(), user1.getId());
+        userService.addUser(user1);
+        userService.addUser(user2);
+        userService.addUser(user3);
 
-        List<Film> result = likeService.getMostPopularFilms(2);
-
-        assertThat(result.get(0), is(film1));
-        assertThat(result.get(1), is(film3));
+        List<Film> recommendation = recommendationService.getRecommendation(user1.getId());
+        assertEquals(recommendation.size(), 0);
     }
 
     @Test
-    public void testGetMostLikedFilmsWithLimit() {
-        testLikeFilm();
+    public void shouldEmptyFilmListWhenWhenThereAreNoSimilarTastesUsers() {
+        filmService.addFilm(film1);
+        filmService.addFilm(film2);
+        filmService.addFilm(film3);
 
-        List<Film> result = likeService.getMostPopularFilms(2);
+        userService.addUser(user1);
+        userService.addUser(user2);
+        userService.addUser(user3);
 
-        assertThat(result.get(0), is(film3));
-        assertThat(result.get(1), is(film1));
+        likeService.like(film1.getId(), user1.getId());
+
+        likeService.like(film3.getId(), user2.getId());
+        likeService.like(film2.getId(), user3.getId());
+
+        List<Film> recommendation = recommendationService.getRecommendation(user1.getId());
+        assertEquals(recommendation.size(), 0);
     }
-
-
 }
