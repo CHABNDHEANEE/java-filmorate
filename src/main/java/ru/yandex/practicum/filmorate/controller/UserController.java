@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Feed;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FeedService;
 import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import javax.validation.Valid;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserDbService userService;
+    private final FeedService feedService;
 
     @PostMapping("/users")
     public User addUser(@Valid @RequestBody User user) {
@@ -67,5 +70,12 @@ public class UserController {
         log.info("get common friends controller");
 
         return userService.getCommonFriends(id, otherId);
+    }
+
+    @GetMapping("/users/{id}/feed")
+    public List<Feed> getFeed(@PathVariable("id") int id) {
+        log.info("get feed by userId" + id);
+
+        return feedService.getFeed(id);
     }
 }
