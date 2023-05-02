@@ -10,4 +10,6 @@ public interface LikeDao {
     void unlike(int userId, int filmId);
 
     List<Film> getMostPopularFilms(Integer filmsCount);
+
+    List<Film> getMostPopularFilms(List<Integer> filmIds);
 }

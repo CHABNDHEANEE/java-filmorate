@@ -10,7 +10,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
+import ru.yandex.practicum.filmorate.service.LikeService;
+import ru.yandex.practicum.filmorate.service.UserDbService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,14 +29,31 @@ public class FilmDaoTest {
     private final FilmDbService filmService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
+    private final LikeService likeService;
+    private final UserDbService userDbService;
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film3 = new Film(3, "God Father3", List.of(genre), "Film about father3",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film4 = new Film(4, "God Father4", List.of(genre), "Film about father4",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
+
+    private final User user1 = User
+            .builder()
+            .name("Mike")
+            .login("mike")
+            .email("mike@mail.ru")
+            .birthday(LocalDate.now())
+            .build();
+
+    private final User user2 = User.builder()
+            .name("Vasya")
+            .login("mike")
+            .email("vs@mail.ru")
+            .birthday(LocalDate.now())
+            .build();
 
     @BeforeEach
     void beforeEach() {
@@ -73,6 +93,23 @@ public class FilmDaoTest {
         assertThat(result.size(), is(2));
         checkFilm(result.get(0), film1);
         checkFilm(result.get(1), film2);
+    }
+
+    @Test
+    public void commonFilms() {
+        userDbService.addUser(user1);
+        userDbService.addUser(user2);
+
+        likeService.like(film1.getId(), 1);
+        likeService.like(film1.getId(), 2);
+
+        List<Film> expected = List.of(film1);
+
+        List<Film> result = filmService.getCommonFilms(1, 2);
+
+        assertThat(result.size(), is(expected.size()));
+        assertThat(result.get(0), is(expected.get(0)));
+        assertThat(result.get(0).getName(), is(film1.getName()));
     }
 
     private void checkFilm(Film result, Film expected) {

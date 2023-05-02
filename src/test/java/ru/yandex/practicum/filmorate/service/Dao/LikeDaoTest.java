@@ -27,6 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 public class LikeDaoTest {
     private final FilmDbService filmService;
     private final UserDbService userService;
+
     private final LikeService likeService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);

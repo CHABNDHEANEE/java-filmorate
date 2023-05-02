@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
@@ -10,6 +11,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Qualifier
 @RequiredArgsConstructor
@@ -35,4 +37,18 @@ public class FilmDbService {
         film.setMpa(ratingDao.getRatingById(film.getMpa().getId()));
         return filmDao.updateFilm(film);
     }
+
+    public List<Film> getFilmWithDirectorSortByYear(int directorId) {
+        return filmDao.getFilmWithDirectorSortByYear(directorId);
+    }
+
+    public List<Film> getFilmWithDirectorSortByLikes(int directorId) {
+        return filmDao.getFilmWithDirectorSortByLikes(directorId);
+    }
+
+    public List<Film> getCommonFilms(Integer userId, Integer friendId) {
+        log.info("Get common films between user id='{}' and friend id='{}'", userId, friendId);
+        return filmDao.findCommonFilms(userId, friendId);
+    }
 }
+

@@ -35,7 +35,7 @@ class FilmorateApplicationTests {
 		genre = new FilmGenre(1);
 		mpa = new FilmRating(1);
 		film = new Film(1, "God Father", List.of(genre), "Film about father",
-				LocalDate.now(), 240, mpa);
+				LocalDate.now(), 240, mpa, null);
 		user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
 	}
 

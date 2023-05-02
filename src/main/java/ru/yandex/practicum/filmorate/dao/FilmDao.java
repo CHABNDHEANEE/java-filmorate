@@ -12,4 +12,10 @@ public interface FilmDao {
     Film getFilmById(int filmId);
 
     List<Film> getFilmsList(int max);
+
+    List<Film> getFilmWithDirectorSortByYear(int directorId);
+
+    public List<Film> getFilmWithDirectorSortByLikes(int directorId);
+
+    List<Film> findCommonFilms(Integer userId, Integer friendId);
 }
