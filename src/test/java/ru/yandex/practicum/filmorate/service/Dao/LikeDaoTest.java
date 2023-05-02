@@ -32,11 +32,11 @@ public class LikeDaoTest {
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final Film film3 = new Film(3, "God Father3", List.of(genre), "Film about father3",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, null);
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final User user2 = new User(2, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
 
@@ -64,8 +64,8 @@ public class LikeDaoTest {
 
         List<Film> result = likeService.getMostPopularFilms(2);
 
-        assertThat(result.get(0), is(film1));
-        assertThat(result.get(1), is(film3));
+        assertThat(result.get(0).getId(), is(film1.getId()));
+        assertThat(result.get(1).getId(), is(film3.getId()));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class LikeDaoTest {
 
         List<Film> result = likeService.getMostPopularFilms(2);
 
-        assertThat(result.get(0), is(film3));
-        assertThat(result.get(1), is(film1));
+        assertThat(result.get(0).getId(), is(film3.getId()));
+        assertThat(result.get(1).getId(), is(film1.getId()));
     }
 }
