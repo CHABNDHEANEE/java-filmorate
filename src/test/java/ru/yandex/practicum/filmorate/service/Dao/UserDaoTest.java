@@ -140,16 +140,4 @@ public class UserDaoTest {
 
         assertThat(result2.size(), is(result.size()));
     }
-
-//    @Test
-//    void shouldRemoveFilm1WhenFilmContainsLikes() {
-//        List<Film> result = filmService.getFilmsList(10);
-//        Film film = filmService.addFilm(film4);
-//        User user = userDbService.addUser(user1);
-//        likeService.like(film.getId(), user.getId());
-//        filmService.deleteFilm(film.getId());
-//        List<Film> result2 = filmService.getFilmsList(10);
-//
-//        assertThat(result2.size(), is(result.size()));
-//    }
 }
