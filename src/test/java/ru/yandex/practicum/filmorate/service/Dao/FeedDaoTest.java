@@ -30,10 +30,12 @@ public class FeedDaoTest {
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa, null);
+            LocalDate.now(), 240, mpa);
 
-    private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
-    private final User user2 = new User(2, "test2@gmail.com", "testLogin2", "Name2", LocalDate.of(2020, 1, 1));
+    private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name",
+            LocalDate.of(2000, 1, 1));
+    private final User user2 = new User(2, "test2@gmail.com", "testLogin2", "Name2",
+            LocalDate.of(2020, 1, 1));
     private final Review review1 = new Review(1, "review content1", true, 1, 1, 0);
 
     @Test

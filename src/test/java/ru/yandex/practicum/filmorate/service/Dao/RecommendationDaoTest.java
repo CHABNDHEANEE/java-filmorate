@@ -18,7 +18,7 @@ import ru.yandex.practicum.filmorate.service.UserDbService;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -34,11 +34,11 @@ public class RecommendationDaoTest {
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa, null);
+            LocalDate.now(), 240, mpa);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
-            LocalDate.now(), 240, mpa, null);
+            LocalDate.now(), 240, mpa);
     private final Film film3 = new Film(3, "God Father3", List.of(genre), "Film about father3",
-            LocalDate.now(), 240, mpa, null);
+            LocalDate.now(), 240, mpa);
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final User user2 = new User(2, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final User user3 = new User(3, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
