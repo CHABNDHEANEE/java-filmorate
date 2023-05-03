@@ -53,7 +53,6 @@ public class FeedDaoImpl implements FeedDao {
         }, keyHolder);
 
         event.setEventId(Objects.requireNonNull(keyHolder.getKey()).intValue());
-        //jdbcTemplate.update(sql, entityId, userId, timeStamp, eventType.toString(), operation.toString());
     }
 
     @Override

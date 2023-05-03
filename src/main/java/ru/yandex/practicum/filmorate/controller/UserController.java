@@ -80,7 +80,6 @@ public class UserController {
         return recommendationService.getRecommendation(id);
     }
 
-
     @GetMapping("/users/{id}/feed")
     public List<Feed> getFeed(@PathVariable("id") int id) {
         log.info("get feed by userId" + id);
