@@ -82,6 +82,21 @@ public class LikeDaoImpl implements LikeDao {
         return jdbcTemplate.query(sql, this::makeFilm, genreId, limit);
     }
 
+    @Override
+    public List<Film> findMostPopularFilms(List<Integer> filmIds) {
+        String filmsIdToString = filmIds.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining(",", "", ""));
+        StringBuilder sqlb = new StringBuilder(
+                "SELECT DISTINCT f.* " +
+                        "FROM films AS f " +
+                        "LEFT OUTER JOIN users_liked_films AS l " +
+                        "ON l.film_id = f.film_id " +
+                        "WHERE f.film_id IN()");
+        sqlb.insert(sqlb.length() - 1, filmsIdToString);
+        return jdbcTemplate.query(sqlb.toString(), LikeDaoImpl.this::makeFilm);
+    }
+
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
         return Film.builder()
                 .id(rs.getInt("film_id"))
