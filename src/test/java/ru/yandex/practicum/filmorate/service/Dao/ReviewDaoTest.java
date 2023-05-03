@@ -15,8 +15,8 @@ import ru.yandex.practicum.filmorate.service.UserDbService;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -28,11 +28,10 @@ public class ReviewDaoTest {
     private final ReviewService reviewService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
-    private final Director dr = new Director(1);
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa, List.of(dr));
+            LocalDate.now(), 240, mpa);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
-            LocalDate.now(), 240, mpa, List.of(dr));
+            LocalDate.now(), 240, mpa);
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     private final Review review1 = new Review(1, "review content1", true, 1, 1, 0);
     private final Review review2 = new Review(2, "review content2", true, 1, 2, 0);
