@@ -54,7 +54,7 @@ public class RecommendationService {
                 .filter(filmId -> !userFilmsIds.contains(filmId))
                 .collect(Collectors.toList());
         log.info("Recommendation films for userId {}: {}", userId, recommendationFilmsIds);
-        return likeDao.getMostPopularFilms(recommendationFilmsIds);
+        return likeDao.findMostPopularFilms(recommendationFilmsIds);
     }
 
     private Map<Integer, List<Integer>> getUserFilms() {
