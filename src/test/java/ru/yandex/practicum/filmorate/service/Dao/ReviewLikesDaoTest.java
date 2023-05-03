@@ -16,8 +16,8 @@ import ru.yandex.practicum.filmorate.service.UserDbService;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase

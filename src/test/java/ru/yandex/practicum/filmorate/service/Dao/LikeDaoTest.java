@@ -101,7 +101,6 @@ public class LikeDaoTest {
         );
     }
 
-
     @Test
     @DisplayName("findMostPopularFilms | empty list films | user likes no added")
     void findMostPopularFilms_emptyList_noAddedLikes() {
