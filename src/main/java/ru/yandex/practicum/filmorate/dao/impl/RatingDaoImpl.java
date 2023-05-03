@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.FilmRating;
 
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class RatingDaoImpl implements RatingDao {
     private final JdbcTemplate jdbcTemplate;

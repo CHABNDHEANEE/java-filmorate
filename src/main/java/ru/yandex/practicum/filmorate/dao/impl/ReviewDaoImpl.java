@@ -17,8 +17,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class ReviewDaoImpl implements ReviewDao {
     private final JdbcTemplate jdbcTemplate;
     private final FilmDao filmDao;
