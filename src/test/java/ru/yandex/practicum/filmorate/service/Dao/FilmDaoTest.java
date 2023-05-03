@@ -27,10 +27,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class FilmDaoTest {
     private final FilmDbService filmService;
+
+    private final LikeService likeService;
+
+    private final UserDbService userDbService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
-    private final LikeService likeService;
-    private final UserDbService userDbService;
+
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
             LocalDate.now(), 240, mpa, null);
     private final Film film2 = new Film(2, "God Father2", List.of(genre), "Film about father2",
@@ -93,6 +96,28 @@ public class FilmDaoTest {
         assertThat(result.size(), is(2));
         checkFilm(result.get(0), film1);
         checkFilm(result.get(1), film2);
+    }
+
+    @Test
+    void shouldRemoveFilm1WhenUseMethodDelete() {
+        List<Film> result = filmService.getFilmsList(10);
+        Film film = filmService.addFilm(film4);
+        filmService.deleteFilm(film.getId());
+        List<Film> result2 = filmService.getFilmsList(10);
+
+        assertThat(result2.size(), is(result.size()));
+    }
+
+    @Test
+    void shouldRemoveFilm1WhenFilmContainsLikes() {
+        List<Film> result = filmService.getFilmsList(10);
+        Film film = filmService.addFilm(film4);
+        User user = userDbService.addUser(user1);
+        likeService.like(film.getId(), user.getId());
+        filmService.deleteFilm(film.getId());
+        List<Film> result2 = filmService.getFilmsList(10);
+
+        assertThat(result2.size(), is(result.size()));
     }
 
     @Test

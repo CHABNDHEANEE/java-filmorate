@@ -2,14 +2,14 @@ package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.RecommendationsDao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class RecommendationDaoImpl implements RecommendationsDao {
 

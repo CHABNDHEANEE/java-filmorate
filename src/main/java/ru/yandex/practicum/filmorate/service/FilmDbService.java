@@ -38,6 +38,10 @@ public class FilmDbService {
         return filmDao.updateFilm(film);
     }
 
+    public void deleteFilm(int filmId) {
+        filmDao.deleteFilm(filmId);
+    }
+
     public List<Film> getFilmWithDirectorSortByYear(int directorId) {
         return filmDao.getFilmWithDirectorSortByYear(directorId);
     }

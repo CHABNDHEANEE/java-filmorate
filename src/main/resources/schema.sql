@@ -41,20 +41,20 @@ create table IF NOT EXISTS FRIENDS
     FRIEND_ID            INTEGER not null,
     FRIENDSHIP_STATUS_ID INTEGER not null,
     constraint "FRIENDS_FRIENDSHIP_STATUS_STATUS_ID_fk"
-        foreign key (FRIENDSHIP_STATUS_ID) references FRIENDSHIP_STATUS,
+        foreign key (FRIENDSHIP_STATUS_ID) references FRIENDSHIP_STATUS ON DELETE CASCADE,
     constraint "FRIENDS_USERS_USER_ID_fk"
-        foreign key (USER_ID) references USERS,
+        foreign key (USER_ID) references USERS ON DELETE CASCADE,
     constraint "FRIENDS_USERS_USER_ID_fk2"
-        foreign key (FRIEND_ID) references USERS
+        foreign key (FRIEND_ID) references USERS ON DELETE CASCADE
 );
 create table IF NOT EXISTS USERS_LIKED_FILMS
 (
     FILM_ID INTEGER not null,
     USER_ID INTEGER not null,
     constraint "USERS_LIKED_FILM_FILMS_FILM_ID_fk"
-        foreign key (FILM_ID) references FILMS,
+        foreign key (FILM_ID) references FILMS ON DELETE CASCADE,
     constraint "USERS_LIKED_FILM_USERS_USER_ID_fk"
-        foreign key (USER_ID) references USERS
+        foreign key (USER_ID) references USERS ON DELETE CASCADE
 );
 create table IF NOT EXISTS GENRES
 (
@@ -68,7 +68,7 @@ create table IF NOT EXISTS FILM_GENRE
     FILM_ID  INTEGER not null,
     GENRE_ID INTEGER not null,
     constraint "FILM_GENRE_FILMS_FILM_ID_fk"
-        foreign key (FILM_ID) references FILMS,
+        foreign key (FILM_ID) references FILMS ON DELETE CASCADE,
     constraint "FILM_GENRE_GENRES_GENRE_ID_fk"
         foreign key (GENRE_ID) references GENRES
 );

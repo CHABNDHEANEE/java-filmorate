@@ -70,6 +70,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public void delete(int userId) {
+        getUserById(userId);
+        String sqlQuery = "DELETE FROM users WHERE user_id = ?";
+        jdbcTemplate.update(sqlQuery, userId);
+    }
+
+    @Override
     public void addFriend(int userId, int friendId) {
         String sql = "INSERT INTO friends (user_id, friend_id, friendship_status_id) " +
                 "VALUES (?, ?, 1)";
@@ -98,6 +105,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getFriends(int userId) {
+        getUserById(userId);
         String sql =
                         "SELECT u.* " +
                         "FROM friends AS f " +

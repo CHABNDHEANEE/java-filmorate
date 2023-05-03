@@ -49,6 +49,7 @@ public class LikeDaoTest {
         createUsersAndFilms();
 
         likeService.like(film1.getId(), user1.getId());
+
         likeService.like(film3.getId(), user2.getId());
         likeService.like(film3.getId(), user1.getId());
 

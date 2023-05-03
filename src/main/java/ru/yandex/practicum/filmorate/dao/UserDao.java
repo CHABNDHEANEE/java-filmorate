@@ -20,4 +20,6 @@ public interface UserDao {
     List<User> getUsersList(int max);
 
     User updateUser(User user);
+
+    void delete(int userId);
 }

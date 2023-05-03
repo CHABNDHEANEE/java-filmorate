@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
@@ -20,7 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class FilmDaoImpl implements FilmDao {
     final JdbcTemplate jdbcTemplate;
@@ -97,7 +97,16 @@ public class FilmDaoImpl implements FilmDao {
     public List<Film> getFilmsList(int max) {
         String sql =
                 "SELECT * FROM films LIMIT ?";
+
         return jdbcTemplate.query(sql, this::makeFilm, max);
+    }
+
+    @Override
+    public void deleteFilm(int filmId) {
+        getFilmById(filmId);
+        String sqlQuery = "DELETE FROM films " +
+                "WHERE film_id = ?";
+        jdbcTemplate.update(sqlQuery, filmId);
     }
 
     @Override

@@ -13,6 +13,8 @@ public interface FilmDao {
 
     List<Film> getFilmsList(int max);
 
+    void deleteFilm(int filmId);
+
     List<Film> getFilmWithDirectorSortByYear(int directorId);
 
     List<Film> getFilmWithDirectorSortByLikes(int directorId);

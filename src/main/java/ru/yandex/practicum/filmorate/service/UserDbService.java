@@ -66,4 +66,8 @@ public class UserDbService {
     private void checkExistenceOfUser(int userId) {
         userDao.getUserById(userId);
     }
+
+    public void deleteUser(int userId) {
+        userDao.delete(userId);
+    }
 }
