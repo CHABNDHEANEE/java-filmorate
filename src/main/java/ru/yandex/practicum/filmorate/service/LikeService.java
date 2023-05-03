@@ -21,13 +21,13 @@ public class LikeService {
     private final LikeDao likeDao;
     private final UserDao userDao;
     private final FilmDao filmDao;
+
     private final FeedDao feedDao;
 
     public void like(int filmId, int userId) {
         checkExistenceOfUserAndFilm(filmId, userId);
         likeDao.like(userId, filmId);
         feedDao.addFeed(filmId, userId, Instant.now().toEpochMilli(), LIKE, ADD);
-    }
 
     public void unlike(int filmId, int userId) {
         checkExistenceOfUserAndFilm(filmId, userId);
@@ -35,8 +35,8 @@ public class LikeService {
         feedDao.addFeed(filmId, userId, Instant.now().toEpochMilli(), LIKE, REMOVE);
     }
 
-    public List<Film> getMostPopularFilms(Integer filmsCount) {
-        return likeDao.getMostPopularFilms(filmsCount);
+    public List<Film> getPopularFilms(Integer limit, Integer genreId, String year) {
+        return likeDao.findPopularFilms(limit, genreId, year);
     }
 
     private void checkExistenceOfUserAndFilm(int filmId, int userId) {

@@ -29,9 +29,9 @@ public class LikeController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
-        log.info("get best films.");
-
-        return likeService.getMostPopularFilms(count);
+    public List<Film> getPopularFilms(@RequestParam(required = false) Integer genreId,
+                                      @RequestParam(name = "count", required = false, defaultValue = "10") Integer limit,
+                                      @RequestParam(required = false) String year) {
+        return likeService.getPopularFilms(limit, genreId, year);
     }
 }
