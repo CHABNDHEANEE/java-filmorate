@@ -21,13 +21,13 @@ public class LikeService {
     private final LikeDao likeDao;
     private final UserDao userDao;
     private final FilmDao filmDao;
-
     private final FeedDao feedDao;
 
     public void like(int filmId, int userId) {
         checkExistenceOfUserAndFilm(filmId, userId);
         likeDao.like(userId, filmId);
         feedDao.addFeed(filmId, userId, Instant.now().toEpochMilli(), LIKE, ADD);
+    }
 
     public void unlike(int filmId, int userId) {
         checkExistenceOfUserAndFilm(filmId, userId);
