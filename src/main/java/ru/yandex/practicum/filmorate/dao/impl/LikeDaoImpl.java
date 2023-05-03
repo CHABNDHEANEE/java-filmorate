@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.LikeDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
@@ -19,6 +20,7 @@ public class LikeDaoImpl implements LikeDao {
     private final JdbcTemplate jdbcTemplate;
     private final GenreDao genreDao;
     private final RatingDao ratingDao;
+    private final DirectorDao directorDao;
 
     @Override
     public void like(int userId, int filmId) {
@@ -78,6 +80,7 @@ public class LikeDaoImpl implements LikeDao {
                 .releaseDate(rs.getDate("film_release_date").toLocalDate())
                 .duration(rs.getInt("film_duration"))
                 .mpa(ratingDao.getRatingById(rs.getInt("film_rating_id")))
+                .directors(directorDao.getDirectorListForFilm(rs.getInt("film_id")))
                 .build();
     }
 }

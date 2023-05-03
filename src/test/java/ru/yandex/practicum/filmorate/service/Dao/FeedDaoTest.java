@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.service.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,8 +30,9 @@ public class FeedDaoTest {
     private final ReviewService reviewService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
+    private final List<Director> dir = new ArrayList<>();
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
-            LocalDate.now(), 240, mpa);
+            LocalDate.now(), 240, mpa, dir);
 
     private final User user1 = new User(1, "test@gmail.com", "testLogin", "Name",
             LocalDate.of(2000, 1, 1));
