@@ -17,7 +17,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Component
@@ -32,14 +31,6 @@ public class FeedDaoImpl implements FeedDao {
         String sql = "INSERT INTO events (entity_id, user_Id, event_time, event_type, event_operation) " +
                 "values (?, ?, ?, ?, ?)";
 
-        Feed event = Feed.builder()
-                .eventType(eventType)
-                .userId(userId)
-                .timestamp(timeStamp)
-                .entityId(entityId)
-                .operation(operation)
-                .build();
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -51,8 +42,6 @@ public class FeedDaoImpl implements FeedDao {
             stmt.setString(5, operation.toString());
             return stmt;
         }, keyHolder);
-
-        event.setEventId(Objects.requireNonNull(keyHolder.getKey()).intValue());
     }
 
     @Override
