@@ -84,6 +84,7 @@ public class UserController {
     public void delete(@PathVariable int id) {
         userService.deleteUser(id);
     }
+
     @GetMapping("/users/{id}/feed")
     public List<Feed> getFeed(@PathVariable("id") int id) {
         log.info("get feed by userId" + id);
