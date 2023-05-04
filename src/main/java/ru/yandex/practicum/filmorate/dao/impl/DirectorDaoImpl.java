@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class DirectorDaoImpl implements DirectorDao {
             return stmt;
         }, keyHolder);
 
-        int id = (int) keyHolder.getKey().longValue();
+        int id = (int) Objects.requireNonNull(Objects.requireNonNull(keyHolder.getKey())).longValue();
         listIdDirector.add(id);
         return getDirectorById(id);
     }
@@ -109,7 +110,7 @@ public class DirectorDaoImpl implements DirectorDao {
         listIdDirector.remove(directorId - 1);
         deleteDirectorForFilm(directorId);
         jdbcTemplate.update(request,
-                searchingDirector.getId());
+                Objects.requireNonNull(searchingDirector).getId());
     }
 
     @Override

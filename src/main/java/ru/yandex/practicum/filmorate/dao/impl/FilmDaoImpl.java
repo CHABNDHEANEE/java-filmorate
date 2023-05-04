@@ -19,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -49,12 +50,12 @@ public class FilmDaoImpl implements FilmDao {
             return stmt;
         }, keyHolder);
 
-        int id = (int) keyHolder.getKey().longValue();
+        int id = (int) Objects.requireNonNull(keyHolder.getKey()).longValue();
 
         List<FilmGenre> filmGenres = genreDao.addGenresToFilm(id, film.getGenres());
         film.setGenres(filmGenres);
-        List<Director> filmdirectors = directorDao.addDirectorToFilm(id, film.getDirectors());
-        film.setDirectors(filmdirectors);
+        List<Director> filmDirectors = directorDao.addDirectorToFilm(id, film.getDirectors());
+        film.setDirectors(filmDirectors);
 
         return getFilmById(id);
     }
