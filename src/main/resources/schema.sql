@@ -124,5 +124,6 @@ CREATE TABLE IF NOT EXISTS EVENTS
     EVENT_TYPE      CHARACTER VARYING(10) not null,
     EVENT_OPERATION CHARACTER VARYING(10) not null,
     constraint "USER_ID_EVENTS_pk"
-        foreign key (USER_ID) references USERS (USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+        foreign key (USER_ID) references USERS (USER_ID)
+            on delete cascade
 );

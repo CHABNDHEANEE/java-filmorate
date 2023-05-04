@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.FilmGenre;
-import ru.yandex.practicum.filmorate.model.FilmRating;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
+import ru.yandex.practicum.filmorate.service.DirectorDbService;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
 import ru.yandex.practicum.filmorate.service.LikeService;
 import ru.yandex.practicum.filmorate.service.UserDbService;
@@ -33,6 +31,8 @@ public class FilmDaoTest {
     private final UserDbService userDbService;
     private final FilmGenre genre = new FilmGenre(1);
     private final FilmRating mpa = new FilmRating(1);
+    private final DirectorDbService directorService;
+    private final Director director1 = new Director(1, "Father's Director");
 
     private final Film film1 = new Film(1, "God Father", List.of(genre), "Film about father",
             LocalDate.now(), 240, mpa, null);
@@ -42,6 +42,8 @@ public class FilmDaoTest {
             LocalDate.now(), 240, mpa, null);
     private final Film film4 = new Film(4, "God Father4", List.of(genre), "Film about father4",
             LocalDate.now(), 240, mpa, null);
+    private final Film film5 = new Film(5, "God Father5", List.of(genre), "Film about father5",
+            LocalDate.now(), 240, mpa, List.of(director1));
 
     private final User user1 = User
             .builder()
@@ -60,9 +62,12 @@ public class FilmDaoTest {
 
     @BeforeEach
     void beforeEach() {
+        directorService.addDirector(director1);
         filmService.addFilm(film1);
         filmService.addFilm(film2);
         filmService.addFilm(film3);
+        userDbService.addUser(user1);
+        userDbService.addUser(user2);
     }
 
     @Test
@@ -112,8 +117,7 @@ public class FilmDaoTest {
     void shouldRemoveFilm1WhenFilmContainsLikes() {
         List<Film> result = filmService.getFilmsList(10);
         Film film = filmService.addFilm(film4);
-        User user = userDbService.addUser(user1);
-        likeService.like(film.getId(), user.getId());
+        likeService.like(film.getId(), user1.getId());
         filmService.deleteFilm(film.getId());
         List<Film> result2 = filmService.getFilmsList(10);
 
@@ -122,9 +126,6 @@ public class FilmDaoTest {
 
     @Test
     public void commonFilms() {
-        userDbService.addUser(user1);
-        userDbService.addUser(user2);
-
         likeService.like(film1.getId(), 1);
         likeService.like(film1.getId(), 2);
 
@@ -145,5 +146,50 @@ public class FilmDaoTest {
         assertThat(result.getGenres(), is(expected.getGenres()));
         assertThat(result.getReleaseDate(), is(expected.getReleaseDate()));
         assertThat(result.getDuration(), is(expected.getDuration()));
+    }
+
+    @Test
+    public void testGetFilmsByTitle() {
+        likeService.like(film1.getId(), 2);
+        likeService.like(film2.getId(), 1);
+        likeService.like(film2.getId(), 2);
+
+        List<Film> films = filmService.getFilmsSearchByTitle("god");
+
+        assertThat(films.size(), is(3));
+        assertThat(films.get(0), is(film2));
+        assertThat(films.get(1), is(film1));
+    }
+
+    @Test
+    public void testGetFilmsByByDirectorAndTitle() {
+        filmService.addFilm(film4);
+        filmService.addFilm(film5);
+
+        likeService.like(film1.getId(), 1);
+        likeService.like(film5.getId(), 1);
+        likeService.like(film5.getId(), 2);
+
+        List<Film> films = filmService.getFilmsSearchByDirectorAndTitle("fatHer");
+
+        assertThat(films.size(), is(5));
+        assertThat(films.get(0), is(film5));
+        assertThat(films.get(1), is(film1));
+    }
+
+    @Test
+    public void testGetFilmsByDirector() {
+        filmService.addFilm(film4);
+        filmService.addFilm(film5);
+
+        likeService.like(film5.getId(), 1);
+        likeService.like(film4.getId(), 1);
+        likeService.like(film1.getId(), 1);
+        likeService.like(film1.getId(), 2);
+
+        List<Film> films = filmService.getFilmsSearchByDirector("fatHer");
+
+        assertThat(films.size(), is(1));
+        assertThat(films.get(0), is(film5));
     }
 }

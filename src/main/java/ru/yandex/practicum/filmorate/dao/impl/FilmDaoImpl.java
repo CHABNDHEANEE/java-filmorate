@@ -9,8 +9,8 @@ import ru.yandex.practicum.filmorate.dao.DirectorDao;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
-import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 
@@ -147,6 +147,46 @@ public class FilmDaoImpl implements FilmDao {
         );
     }
 
+    @Override
+    public List<Film> getFilmsSearchByTitle(String query) {
+        String sql = "SELECT DISTINCT f.*, COUNT(l.user_id) AS count_likes " +
+                "FROM films AS f " +
+                "LEFT JOIN users_liked_films AS l ON f.film_id = l.film_id " +
+                "WHERE f.film_title ILIKE '%'||?||'%' " +
+                "GROUP BY f.film_id " +
+                "ORDER BY count_likes DESC";
+        return jdbcTemplate.query(sql, this::makeFilm, query);
+    }
+
+    @Override
+    public List<Film> getFilmsSearchByDirectorAndTitle(String query) {
+        String sql = "SELECT f.*, COUNT(l.user_id) AS count_likes " +
+                "FROM films AS f " +
+                "LEFT JOIN users_liked_films AS l ON f.film_id = l.film_id " +
+                "WHERE f.film_title ILIKE '%'||?||'%' OR " +
+                "f.film_id IN " +
+                "(SELECT fd.film_id FROM film_director fd " +
+                "LEFT JOIN director AS d ON fd.id = d.id " +
+                "WHERE d.name ILIKE '%'||?||'%') " +
+                "GROUP BY f.film_id " +
+                "ORDER BY count_likes DESC";
+
+        return jdbcTemplate.query(sql, this::makeFilm, query, query);
+    }
+
+    @Override
+    public List<Film> getFilmsSearchByDirector(String query) {
+        String sql = "SELECT f.*, d.name, COUNT(l.user_id) AS count_likes " +
+                "FROM films AS f " +
+                "JOIN film_director AS fd ON fd.film_id = f.film_id " +
+                "JOIN director AS d ON d.id = fd.id " +
+                "LEFT JOIN users_liked_films AS l ON f.film_id = l.film_id " +
+                "WHERE d.name ILIKE '%'||?||'%' " +
+                "GROUP BY f.film_id " +
+                "ORDER BY count_likes DESC";
+
+        return jdbcTemplate.query(sql, this::makeFilm, query);
+    }
 
     private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
         return Film.builder()
