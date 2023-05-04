@@ -104,7 +104,7 @@ public class FilmDaoTest {
     }
 
     @Test
-    void shouldRemoveFilm1WhenUseMethodDelete() {
+    public void shouldRemoveFilm1WhenUseMethodDelete() {
         List<Film> result = filmService.getFilmsList(10);
         Film film = filmService.addFilm(film4);
         filmService.deleteFilm(film.getId());
@@ -114,7 +114,7 @@ public class FilmDaoTest {
     }
 
     @Test
-    void shouldRemoveFilm1WhenFilmContainsLikes() {
+    public void shouldRemoveFilm1WhenFilmContainsLikes() {
         List<Film> result = filmService.getFilmsList(10);
         Film film = filmService.addFilm(film4);
         likeService.like(film.getId(), user1.getId());
@@ -136,16 +136,6 @@ public class FilmDaoTest {
         assertThat(result.size(), is(expected.size()));
         assertThat(result.get(0), is(expected.get(0)));
         assertThat(result.get(0).getName(), is(film1.getName()));
-    }
-
-    private void checkFilm(Film result, Film expected) {
-        assertThat(result.getId(), is(expected.getId()));
-        assertThat(result.getName(), is(expected.getName()));
-        assertThat(result.getMpa(), is(expected.getMpa()));
-        assertThat(result.getDescription(), is(expected.getDescription()));
-        assertThat(result.getGenres(), is(expected.getGenres()));
-        assertThat(result.getReleaseDate(), is(expected.getReleaseDate()));
-        assertThat(result.getDuration(), is(expected.getDuration()));
     }
 
     @Test
@@ -191,5 +181,15 @@ public class FilmDaoTest {
 
         assertThat(films.size(), is(1));
         assertThat(films.get(0), is(film5));
+    }
+
+    private void checkFilm(Film result, Film expected) {
+        assertThat(result.getId(), is(expected.getId()));
+        assertThat(result.getName(), is(expected.getName()));
+        assertThat(result.getMpa(), is(expected.getMpa()));
+        assertThat(result.getDescription(), is(expected.getDescription()));
+        assertThat(result.getGenres(), is(expected.getGenres()));
+        assertThat(result.getReleaseDate(), is(expected.getReleaseDate()));
+        assertThat(result.getDuration(), is(expected.getDuration()));
     }
 }
