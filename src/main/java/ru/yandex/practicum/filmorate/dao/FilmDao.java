@@ -20,4 +20,10 @@ public interface FilmDao {
     List<Film> getFilmWithDirectorSortByLikes(int directorId);
 
     List<Film> findCommonFilms(Integer userId, Integer friendId);
+
+    List<Film> getFilmsSearchByTitle(String title);
+
+    List<Film> getFilmsSearchByDirectorAndTitle(String query);
+
+    List<Film> getFilmsSearchByDirector(String query);
 }

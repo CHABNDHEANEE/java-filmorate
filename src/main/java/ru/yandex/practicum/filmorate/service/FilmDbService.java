@@ -54,5 +54,17 @@ public class FilmDbService {
         log.info("Get common films between user id='{}' and friend id='{}'", userId, friendId);
         return filmDao.findCommonFilms(userId, friendId);
     }
+
+    public List<Film> getFilmsSearchByTitle(String title) {
+        return filmDao.getFilmsSearchByTitle(title);
+    }
+
+    public List<Film> getFilmsSearchByDirectorAndTitle(String query) {
+        return filmDao.getFilmsSearchByDirectorAndTitle(query);
+    }
+
+    public List<Film> getFilmsSearchByDirector(String query) {
+        return filmDao.getFilmsSearchByDirector(query);
+    }
 }
 

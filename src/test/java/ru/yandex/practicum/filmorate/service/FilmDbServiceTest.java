@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 import ru.yandex.practicum.filmorate.model.FilmRating;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,19 +24,15 @@ public class FilmDbServiceTest {
     private final FilmDbService filmService;
     private Film film;
     private Film film2;
-    private User user;
-    private FilmGenre genre;
-    private FilmRating mpa;
 
     @BeforeEach
     void beforeEach() {
-        genre = new FilmGenre(1);
-        mpa = new FilmRating(1);
+        FilmGenre genre = new FilmGenre(1);
+        FilmRating mpa = new FilmRating(1);
         film = new Film(1, "God Father", List.of(genre), "Film about father",
                 LocalDate.now(), 240, mpa, null);
         film2 = new Film(2, "God Father", List.of(genre), "Film about father",
                 LocalDate.now(), 240, mpa, null);
-        user = new User(1, "test@gmail.com", "testLogin", "Name", LocalDate.of(2000, 1, 1));
     }
 
     @Test
