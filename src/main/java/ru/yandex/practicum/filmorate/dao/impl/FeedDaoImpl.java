@@ -67,7 +67,7 @@ public class FeedDaoImpl implements FeedDao {
                 "SELECT * FROM users WHERE user_id = ?";
         SqlRowSet userRows = jdbcTemplate.queryForRowSet(userCheck, userId);
         if (!userRows.next()) {
-            throw new ObjectExistenceException("User " + userId + " Not Found");
+            throw new ObjectExistenceException(String.format("User %d Not Found", userId));
         }
     }
 }

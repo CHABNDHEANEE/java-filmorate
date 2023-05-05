@@ -9,8 +9,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmDbService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -84,16 +82,6 @@ public class FilmController {
     public List<Film> searchFilm(@RequestParam String query,
                                  @RequestParam String by) {
         log.info("films search by " + by);
-        List<String> list = new ArrayList<>(Arrays.asList(by.split(",")));
-        if (list.size() == 2) {
-            return filmService.getFilmsSearchByDirectorAndTitle(query);
-        }
-        if (list.get(0).equalsIgnoreCase("title")) {
-            return filmService.getFilmsSearchByTitle(query);
-        }
-        if (list.get(0).equalsIgnoreCase("director")) {
-            return filmService.getFilmsSearchByDirector(query);
-        } else
-            throw new IllegalArgumentException("unexpected param <by> - " + by);
+        return filmService.searchFilm(query, by);
     }
 }

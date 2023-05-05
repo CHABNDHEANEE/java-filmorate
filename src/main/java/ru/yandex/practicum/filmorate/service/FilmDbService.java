@@ -9,6 +9,8 @@ import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -55,16 +57,17 @@ public class FilmDbService {
         return filmDao.findCommonFilms(userId, friendId);
     }
 
-    public List<Film> getFilmsSearchByTitle(String title) {
-        return filmDao.getFilmsSearchByTitle(title);
-    }
-
-    public List<Film> getFilmsSearchByDirectorAndTitle(String query) {
-        return filmDao.getFilmsSearchByDirectorAndTitle(query);
-    }
-
-    public List<Film> getFilmsSearchByDirector(String query) {
-        return filmDao.getFilmsSearchByDirector(query);
+    public List<Film> searchFilm(String query, String by) {
+        List<String> list = new ArrayList<>(Arrays.asList(by.split(",")));
+        if (list.size() == 2) {
+            return filmDao.getFilmsSearchByDirectorAndTitle(query);
+        }
+        if (list.get(0).equalsIgnoreCase("title")) {
+            return filmDao.getFilmsSearchByTitle(query);
+        }
+        if (list.get(0).equalsIgnoreCase("director")) {
+            return filmDao.getFilmsSearchByDirector(query);
+        } else
+            throw new IllegalArgumentException("unexpected param <by> - " + by);
     }
 }
-

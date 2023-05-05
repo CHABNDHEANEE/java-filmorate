@@ -144,7 +144,7 @@ public class FilmDaoTest {
         likeService.like(film2.getId(), 1);
         likeService.like(film2.getId(), 2);
 
-        List<Film> films = filmService.getFilmsSearchByTitle("god");
+        List<Film> films = filmService.searchFilm("god", "title");
 
         assertThat(films.size(), is(3));
         assertThat(films.get(0), is(film2));
@@ -160,7 +160,7 @@ public class FilmDaoTest {
         likeService.like(film5.getId(), 1);
         likeService.like(film5.getId(), 2);
 
-        List<Film> films = filmService.getFilmsSearchByDirectorAndTitle("fatHer");
+        List<Film> films = filmService.searchFilm("fatHer", "director,title");
 
         assertThat(films.size(), is(5));
         assertThat(films.get(0), is(film5));
@@ -177,7 +177,7 @@ public class FilmDaoTest {
         likeService.like(film1.getId(), 1);
         likeService.like(film1.getId(), 2);
 
-        List<Film> films = filmService.getFilmsSearchByDirector("fatHer");
+        List<Film> films = filmService.searchFilm("fatHer", "director");
 
         assertThat(films.size(), is(1));
         assertThat(films.get(0), is(film5));
