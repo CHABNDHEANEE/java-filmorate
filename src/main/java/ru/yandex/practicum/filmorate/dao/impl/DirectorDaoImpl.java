@@ -20,7 +20,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class DirectorDaoImpl implements DirectorDao {
     final JdbcTemplate jdbcTemplate;
-    private final ArrayList<Integer> listIdDirector = new ArrayList<>();
 
     @Override
     public Director addDirector(Director director) {
@@ -35,7 +34,6 @@ public class DirectorDaoImpl implements DirectorDao {
         }, keyHolder);
 
         int id = (int) Objects.requireNonNull(Objects.requireNonNull(keyHolder.getKey())).longValue();
-        listIdDirector.add(id);
         return getDirectorById(id);
     }
 
@@ -107,7 +105,6 @@ public class DirectorDaoImpl implements DirectorDao {
             if (director.getId() == directorId)
                 searchingDirector = director;
         }
-        listIdDirector.remove(directorId - 1);
         deleteDirectorForFilm(directorId);
         jdbcTemplate.update(request,
                 Objects.requireNonNull(searchingDirector).getId());
