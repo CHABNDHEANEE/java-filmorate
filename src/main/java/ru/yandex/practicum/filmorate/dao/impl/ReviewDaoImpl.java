@@ -97,12 +97,6 @@ public class ReviewDaoImpl implements ReviewDao {
         return jdbcTemplate.queryForObject(sql, this::makeReview, id);
     }
 
-    @Override
-    public void updateReviewUsefulness(int reviewId, int value) {
-        String sql = "UPDATE reviews SET useful = useful + ? WHERE review_id = ?";
-        jdbcTemplate.update(sql, value, reviewId);
-    }
-
     private Review makeReview(ResultSet rs, int rowNum) throws SQLException {
         return Review.builder()
                 .reviewId(rs.getInt("review_id"))
