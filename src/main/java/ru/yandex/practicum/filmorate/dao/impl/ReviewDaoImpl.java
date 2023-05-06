@@ -5,9 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.dao.FilmDao;
+import ru.yandex.practicum.filmorate.auxilary.DaoHelper;
 import ru.yandex.practicum.filmorate.dao.ReviewDao;
-import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.Review;
 
@@ -21,8 +20,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ReviewDaoImpl implements ReviewDao {
     private final JdbcTemplate jdbcTemplate;
-    private final FilmDao filmDao;
-    private final UserDao userDao;
+    private final DaoHelper daoHelper;
 
     @Override
     public Review addReview(Review review) {
@@ -113,10 +111,16 @@ public class ReviewDaoImpl implements ReviewDao {
     }
 
     private void checkUserExistence(int userId) {
-        userDao.getUserById(userId);
+        String sql =
+                "SELECT * FROM users WHERE user_id = ?";
+
+        jdbcTemplate.queryForObject(sql, daoHelper::makeUser, userId);
     }
 
     private void checkFilmExistence(int filmId) {
-        filmDao.getFilmById(filmId);
+        String sql =
+                "SELECT * FROM films WHERE film_id = ?";
+
+        jdbcTemplate.queryForObject(sql, daoHelper::makeFilm, filmId);
     }
 }

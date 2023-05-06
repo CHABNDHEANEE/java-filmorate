@@ -18,6 +18,4 @@ public interface DirectorDao {
     void deleteDirector(int directorId);
 
     void deleteDirectorForFilm(int filmId);
-
-    List<Director> addDirectorToFilm(int filmId, List<Director> directors);
 }

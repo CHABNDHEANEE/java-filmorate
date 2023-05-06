@@ -3,13 +3,10 @@ package ru.yandex.practicum.filmorate.dao.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.dao.GenreDao;
+import ru.yandex.practicum.filmorate.auxilary.DaoHelper;
 import ru.yandex.practicum.filmorate.dao.LikeDao;
-import ru.yandex.practicum.filmorate.dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +14,7 @@ import java.util.stream.Collectors;
 @Repository
 public class LikeDaoImpl implements LikeDao {
     private final JdbcTemplate jdbcTemplate;
-    private final GenreDao genreDao;
-    private final RatingDao ratingDao;
+    private final DaoHelper daoHelper;
 
     @Override
     public void like(int userId, int filmId) {
@@ -47,7 +43,7 @@ public class LikeDaoImpl implements LikeDao {
                     "GROUP BY f.film_id " +
                     "ORDER BY COUNT(l.user_id) DESC " +
                     "LIMIT ?";
-            return jdbcTemplate.query(sql, this::makeFilm, limit);
+            return jdbcTemplate.query(sql, daoHelper::makeFilm, limit);
         }
 
         if (genreId != null && year != null) {
@@ -58,7 +54,7 @@ public class LikeDaoImpl implements LikeDao {
                     "GROUP BY f.FILM_ID " +
                     "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
                     "LIMIT ? ";
-            return jdbcTemplate.query(sql, this::makeFilm, genreId, year, limit);
+            return jdbcTemplate.query(sql, daoHelper::makeFilm, genreId, year, limit);
         }
 
         if (genreId == null) {
@@ -69,7 +65,7 @@ public class LikeDaoImpl implements LikeDao {
                     "GROUP BY f.FILM_ID " +
                     "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
                     "LIMIT ? ";
-            return jdbcTemplate.query(sql, this::makeFilm, year, limit);
+            return jdbcTemplate.query(sql, daoHelper::makeFilm, year, limit);
         }
 
         String sql = "SELECT f.* FROM FILMS f\n" +
@@ -79,7 +75,7 @@ public class LikeDaoImpl implements LikeDao {
                 "GROUP BY f.FILM_ID " +
                 "ORDER BY COUNT(ulf.USER_ID) DESC\n" +
                 "LIMIT ? ";
-        return jdbcTemplate.query(sql, this::makeFilm, genreId, limit);
+        return jdbcTemplate.query(sql, daoHelper::makeFilm, genreId, limit);
     }
 
     @Override
@@ -94,19 +90,6 @@ public class LikeDaoImpl implements LikeDao {
                         "ON l.film_id = f.film_id " +
                         "WHERE f.film_id IN()");
         sql.insert(sql.length() - 1, filmsIdToString);
-        return jdbcTemplate.query(sql.toString(), LikeDaoImpl.this::makeFilm);
-    }
-
-    private Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        return Film.builder()
-                .id(rs.getInt("film_id"))
-                .name(rs.getString("film_title"))
-                .genres(genreDao.getGenresListForFilm(rs.getInt("film_id")))
-                .description(rs.getString("film_description"))
-                .releaseDate(rs.getDate("film_release_date").toLocalDate())
-                .duration(rs.getInt("film_duration"))
-                .mpa(ratingDao.getRatingById(rs.getInt("film_rating_id")))
-                .directors(List.of())
-                .build();
+        return jdbcTemplate.query(sql.toString(), daoHelper::makeFilm);
     }
 }

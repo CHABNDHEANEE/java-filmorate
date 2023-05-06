@@ -5,21 +5,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.auxilary.DaoHelper;
 import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.exception.ObjectExistenceException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
-    final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final DaoHelper daoHelper;
 
     @Override
     public User addUser(User user) {
@@ -100,7 +100,7 @@ public class UserDaoImpl implements UserDao {
         String sql =
                 "SELECT * FROM users WHERE user_id = ?";
 
-        return jdbcTemplate.queryForObject(sql, this::makeUser, userId);
+        return jdbcTemplate.queryForObject(sql, daoHelper::makeUser, userId);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class UserDaoImpl implements UserDao {
                         "ON f.friend_id = u.user_id " +
                         "WHERE f.user_id = ?";
 
-        return jdbcTemplate.query(sql, this::makeUser, userId);
+        return jdbcTemplate.query(sql, daoHelper::makeUser, userId);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class UserDaoImpl implements UserDao {
                                 "JOIN u2 " +
                                 "ON u1.user_id = u2.user_id ";
 
-        return jdbcTemplate.query(sql, this::makeUser, userId, friendId);
+        return jdbcTemplate.query(sql, daoHelper::makeUser, userId, friendId);
     }
 
     @Override
@@ -148,17 +148,7 @@ public class UserDaoImpl implements UserDao {
                         "FROM users " +
                         "LIMIT ?";
 
-        return jdbcTemplate.query(sql, this::makeUser, max);
-    }
-
-    private User makeUser(ResultSet rs, int rowNum) throws SQLException {
-        return User.builder()
-                .id(rs.getInt("user_id"))
-                .email(rs.getString("user_email"))
-                .login(rs.getString("user_login"))
-                .name(rs.getString("user_name"))
-                .birthday(rs.getDate("user_birthday").toLocalDate())
-                .build();
+        return jdbcTemplate.query(sql, daoHelper::makeUser, max);
     }
 
     private void checkConfirmation(int userId, int friendId) {

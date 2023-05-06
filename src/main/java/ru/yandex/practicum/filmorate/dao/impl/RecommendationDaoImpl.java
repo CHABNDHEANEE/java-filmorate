@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class RecommendationDaoImpl implements RecommendationsDao {
-
     private final JdbcTemplate jdbcTemplate;
 
     public HashMap<Integer, List<Integer>> getNumTotalUsersFavoriteFilms() {

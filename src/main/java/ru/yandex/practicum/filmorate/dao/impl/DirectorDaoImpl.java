@@ -12,7 +12,6 @@ import ru.yandex.practicum.filmorate.model.Director;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -79,24 +78,6 @@ public class DirectorDaoImpl implements DirectorDao {
     }
 
     @Override
-    public List<Director> addDirectorToFilm(int filmId, List<Director> directors) {
-        String sql =
-                "MERGE INTO film_director " +
-                        "(film_id, id) " +
-                        "KEY(film_id, id) " +
-                        "VALUES (?, ?)";
-
-        if (directors == null || directors.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        for (Director director : directors) {
-            jdbcTemplate.update(sql, filmId, director.getId());
-        }
-        return getDirectorListForFilm(filmId);
-    }
-
-    @Override
     public void deleteDirector(int directorId) {
         String request = "DELETE FROM director WHERE id = ?";
         List<Director> directorsList = getDirectorsList();
@@ -111,12 +92,12 @@ public class DirectorDaoImpl implements DirectorDao {
     }
 
     @Override
-    public void deleteDirectorForFilm(int directorId) {
+    public void deleteDirectorForFilm(int filmId) {
         String sql =
                 "DELETE FROM film_director " +
                         "WHERE film_id = ?";
 
-        jdbcTemplate.update(sql, directorId);
+        jdbcTemplate.update(sql, filmId);
     }
 
     private Director makeDirector(ResultSet rs, int rowNum) throws SQLException {
