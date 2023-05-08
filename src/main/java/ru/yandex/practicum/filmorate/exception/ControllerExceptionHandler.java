@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ValidationException;
 import java.util.Map;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,7 +36,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IncorrectResultSizeDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleIncorrectResultSizeDataAccessException(final IncorrectResultSizeDataAccessException e) {
-        return Map.of("Object doesn't found", e.getMessage());
+        return Map.of("Object doesn't found", Objects.requireNonNull(e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -43,5 +44,4 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     public Map<String, String> handleRuntimeError(final Exception e) {
         return Map.of("Server error!", e.getMessage());
     }
-
 }

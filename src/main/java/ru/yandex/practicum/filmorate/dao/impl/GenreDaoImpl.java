@@ -2,16 +2,15 @@ package ru.yandex.practicum.filmorate.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.model.FilmGenre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class GenreDaoImpl implements GenreDao {
     private final JdbcTemplate jdbcTemplate;
@@ -32,33 +31,6 @@ public class GenreDaoImpl implements GenreDao {
                         "WHERE fg.film_id = ?";
 
         return jdbcTemplate.query(sql, this::makeGenre, filmId);
-    }
-
-    @Override
-    public void deleteGenresForFilm(int filmId) {
-        String sql =
-                "DELETE FROM film_genre " +
-                        "WHERE film_id = ?";
-
-        jdbcTemplate.update(sql, filmId);
-    }
-
-    @Override
-    public List<FilmGenre> addGenresToFilm(int filmId, List<FilmGenre> genres) {
-        String sql =
-                "MERGE INTO film_genre " +
-                        "(film_id, genre_id) " +
-                        "KEY(film_id, genre_id) " +
-                        "VALUES (?, ?)";
-
-        if (genres == null || genres.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        for (FilmGenre genre : genres) {
-            jdbcTemplate.update(sql, filmId, genre.getId());
-        }
-        return getGenresListForFilm(filmId);
     }
 
     @Override

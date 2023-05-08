@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.LikeService;
@@ -10,7 +9,6 @@ import ru.yandex.practicum.filmorate.service.LikeService;
 import java.util.List;
 
 @RestController
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class LikeController {
@@ -31,9 +29,9 @@ public class LikeController {
     }
 
     @GetMapping("/films/popular")
-    public List<Film> getBestFilms(@RequestParam(required = false) Integer count) {
-        log.info("get best films.");
-
-        return likeService.getMostPopularFilms(count);
+    public List<Film> getPopularFilms(@RequestParam(required = false) Integer genreId,
+                                      @RequestParam(name = "count", required = false, defaultValue = "10") Integer limit,
+                                      @RequestParam(required = false) String year) {
+        return likeService.getPopularFilms(limit, genreId, year);
     }
 }
