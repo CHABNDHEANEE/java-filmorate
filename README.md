@@ -29,4 +29,4 @@ Backend социальной сети поддерживающей добавл�
 Для хранения данных используется встраиваемая база данных H2.
 
 Доступ к данным осуществляется через JdbcTemplate с нативными SQL-запросами.
-![ER](https://github.com/CHABNDHEANEE/java-filmorate/blob/main/ER.png?raw=true)
+![ER](https://raw.githubusercontent.com/CHABNDHEANEE/java-filmorate/main/ER.png)
